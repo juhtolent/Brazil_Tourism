@@ -7,7 +7,7 @@ The Brazilian Tourism Map is an instrument within the Tourism Regionalization Pr
 
 ## The Categorization of Tourist Municipalities
 
-The Categorization of Tourist Municipalities is an instrument developed by the Ministry of Tourism (MTur) to identify the performance of the tourism sector economy in the municipalities that are included in the Brazilian Tourism Map. This instrument, foreseen as a strategy for the implementation of the Tourism Regionalization Program, allows for more accurate decision-making and the implementation of policies that respect the peculiarities of Brazilian municipalities.
+The [Categorization of Tourist Municipalities](http://www.regionalizacao.turismo.gov.br/images/conteudo/Perguntas_espostas_Categorizacao_2019.pdf) is an instrument developed by the Ministry of Tourism (MTur) to identify the performance of the tourism sector economy in the municipalities that are included in the Brazilian Tourism Map. This instrument, foreseen as a strategy for the implementation of the Tourism Regionalization Program, allows for more accurate decision-making and the implementation of policies that respect the peculiarities of Brazilian municipalities.
 
 The Categorization is based on a set of indicators that measure the economic performance of tourism in the municipalities, such as:
 - The number of tourist arrivals
