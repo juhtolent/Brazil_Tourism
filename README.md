@@ -17,11 +17,11 @@ The Categorization is based on a set of indicators that measure the economic per
 
 The municipalities are then classified into one of five categories, according to their performance:
 
-<b> A </b> - Emerging Tourist Municipalities
-<b> B </b> - Developing Tourist Municipalities
-<b> C </b> - Consolidating Tourist Municipalities
-<b> D </b> - Tourist Municipalities of National Interest
-<b> E </b> - Tourist Municipalities of International Interest
+<b> A </b> - Emerging Tourist Municipalities <br>
+<b> B </b> - Developing Tourist Municipalities <br>
+<b> C </b> - Consolidating Tourist Municipalities <br>
+<b> D </b> - Tourist Municipalities of National Interest <br>
+<b> E </b> - Tourist Municipalities of International Interest <br>
 
 The Categorization is an important tool for the Ministry of Tourism to guide its policies and investments in the tourism sector. It also helps municipalities to better understand their tourism potential and to develop strategies to attract more tourists.
 
