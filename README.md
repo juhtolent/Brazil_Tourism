@@ -29,8 +29,13 @@ The Categorization is an important tool for the Ministry of Tourism to guide its
 
 The [most recent categorization](https://www.gov.br/pt-br/servicos/mapa-do-turismo-brasileiro) used for this analysis/dashboard was established in 2021. The data sources for each variable are listed below:
 
-a) Number of Accommodation Establishments - source: Relação Anual de Informações Sociais (Annual Social Information Report) - RAIS 2017; <br>
-b) Number of Jobs in Accommodation Establishments - source: Relação Anual de Informações Sociais (Annual Social Information Report) - RAIS 2017; <br>
-c) Estimated Number of Domestic Visitors - source: Domestic Demand Study 2012 - MTur/FIPE; <br>
-d) Estimated Number of International Visitors - source: International Demand Study 2017 - MTur/FIPE; <br>
-e) Collection of Federal Taxes from Accommodation Establishments - source: Secretariat of the Federal Revenue 2017 - Ministry of Economy.
+- Number of Accommodation Establishments (column: 'Estabelecimentos'/'Establishments') <br>
+  - Source:  Relação Anual de Informações Sociais (Annual Social Information Report) - RAIS 2017; <br>
+- Number of Jobs in Accommodation Establishments (column: 'Empregos'/'Jobs') <br>
+  - Source: Relação Anual de Informações Sociais (Annual Social Information Report) - RAIS 2017; <br>
+- Estimated Number of Domestic Visitors (column: 'Domésticos'/'Domestic Tourists')<br> 
+  - Source: Domestic Demand Study 2012 - MTur/FIPE; <br>
+- Estimated Number of International Visitors (column: 'Internacionais'/'International Tourists') <br>
+  - Source: International Demand Study 2017 - MTur/FIPE; <br>
+-  Collection of Federal Taxes from Accommodation Establishments (column: 'Arrecadação de Impostos'/'Tax Revenue') <br>
+  - Source: Secretariat of the Federal Revenue 2017 - Ministry of Economy.
