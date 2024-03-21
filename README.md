@@ -25,3 +25,12 @@ The municipalities are then classified into one of five categories, according to
 
 The Categorization is an important tool for the Ministry of Tourism to guide its policies and investments in the tourism sector. It also helps municipalities to better understand their tourism potential and to develop strategies to attract more tourists.
 
+### 2021: The Latest Categorization
+
+The [most recent categorization](https://www.gov.br/pt-br/servicos/mapa-do-turismo-brasileiro) used for this analysis/dashboard was established in 2021. The data sources for each variable are listed below:
+
+a) Number of Accommodation Establishments - source: Relação Anual de Informações Sociais (Annual Social Information Report) - RAIS 2017; <br>
+b) Number of Jobs in Accommodation Establishments - source: Relação Anual de Informações Sociais (Annual Social Information Report) - RAIS 2017; <br>
+c) Estimated Number of Domestic Visitors - source: Domestic Demand Study 2012 - MTur/FIPE; <br>
+d) Estimated Number of International Visitors - source: International Demand Study 2017 - MTur/FIPE; <br>
+e) Collection of Federal Taxes from Accommodation Establishments - source: Secretariat of the Federal Revenue 2017 - Ministry of Economy.
