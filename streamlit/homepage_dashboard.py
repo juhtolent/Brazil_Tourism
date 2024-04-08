@@ -11,20 +11,30 @@ st.set_page_config(page_title="Portfólio",
                    page_icon="📊",
                    initial_sidebar_state="expanded",
                    menu_items={
-                       'About': "I'm Julia, a data analyst passionate about extracting insights from data. This portfolio showcases my skills in data cleaning, analysis, and visualization, helping you make data-driven decisions."
+                       'About': info['About']
                    })
 
 # ----- introduction
-with st.container():
-    col1, col2 = st.columns([2, 8])
+col1, col2 = st.columns([2, 8])
 
 with col1:
     st.markdown(info['Photo'], unsafe_allow_html=True)
 
 with col2:
-    st.title("Hi! I'm Julia Tolentino!👋")
+    st.title(f"Hi! I'm {info['Name']}!👋")
+    st.caption(f"{info['Pronouns']}")
     st.markdown("I'm a data analyst with a passion for exploring and extracting insights from data. I've been working in the field of data analysis for the past two years, where I've gained valuable experience in various aspects of data science.")
-    st.markdown("This portfolio showcases my skills in **data cleaning, analysis, and visualization, helping you make data-driven decisions.**")
+    st.markdown("This portfolio showcases my skills in **data cleaning, analysis, and visualization**, in order to help you make data-driven decisions.")
+
+# ----- credentials
+    st.markdown(f'''
+                [![Linkedin Badge](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)]({
+                info['Linkedin']})
+                [![Microsoft Outlook Badge](https://img.shields.io/badge/-Email-0078D4?style=flat-square&logo=microsoft-outlook&logoColor=white)](mailto:julia.mtolentino@hotmail.com{
+                info['Email']})
+                [![Github Badge](https://img.shields.io/badge/GitHub-100000?style=flat-square&logo=github&logoColor=white)]({
+                info['Github']})
+                ''', unsafe_allow_html=True)
 
 # ----- page explanation
 col1, col2 = st.columns(2)
@@ -41,4 +51,3 @@ with col2:
     with st.container(border=True):
         st.markdown("### 🏙️ City record")
         st.markdown("🚧Under Construction🚧")
-        # st.markdown("![Under construction](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3pxaHlqcGJybHY2N2RodG8xYTExdHVjbWgyb3AzaGRmZTAxZ2N6NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/cfGmVRsJI6wq6noGxP/giphy.gif)", unsafe_allow_html=True)
