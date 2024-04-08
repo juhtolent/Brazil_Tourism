@@ -23,8 +23,8 @@ with col1:
 
 with col2:
     st.title("Hi! I'm Julia Tolentino!👋")
-    st.markdown("I'm a data analyst with a passion for exploring and extracting insights from data. I've been working in the field of data analysis for the past two years, where I've gained valuable experience in various aspects of data science, including data cleaning, data wrangling, data visualization, and data modeling.")
-    st.markdown("This portfolio showcases my skills in data cleaning, analysis, and visualization, helping you make data-driven decisions.")
+    st.markdown("I'm a data analyst with a passion for exploring and extracting insights from data. I've been working in the field of data analysis for the past two years, where I've gained valuable experience in various aspects of data science.")
+    st.markdown("This portfolio showcases my skills in **data cleaning, analysis, and visualization, helping you make data-driven decisions.**")
 
 # ----- page explanation
 col1, col2 = st.columns(2)
