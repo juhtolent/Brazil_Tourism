@@ -97,8 +97,9 @@ colors = ['#003f5c', '#374c80', '#7a5195',
           '#bc5090', '#ef5675', '#ed9231', '#f2ff49']
 
 
-############
-# Analysis Main Panel
+########## Analysis Main Panel ########
+
+# Title
 st.markdown('''<h2 style = "text-align: center;"><span style="word-wrap:break-word;">
                     🛫Where should we travel to?
                 </span> </h2>''', unsafe_allow_html=True)
@@ -109,6 +110,8 @@ st.caption(f'''This portfolio project showcases my expertise in data analysis th
            This analysis is also explored in a [jupyter notebook](https://github.com/juhtolent/Brazil_Tourism/blob/main/Data%20Analysis%20-%20Tourism.ipynb)
            available in this streamlit's repository.''')
 
+
+# Quick Explanation
 with st.expander("Quick explanation about the Tourism Map"):
     st.markdown('''<h5 style> Tourism Map </h5>''', unsafe_allow_html=True)
     st.markdown('''The Brazilian Tourism Map is an instrument within the Tourism Regionalization 
