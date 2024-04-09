@@ -13,9 +13,6 @@ st.set_page_config(page_title="Portfolio",
 
 # ----- dataframes and cache
 
-# limpar o cache e atualizar as planilhas
-# @st.cache_data.clear()
-
 @st.cache_data
 def import_category_2019():
     df_2019 = pd.read_excel(
@@ -35,6 +32,7 @@ def import_category_2019():
         'Código Município': 'City Code'}, axis='columns', inplace=True)
     return df_2019
 
+df_2019 = import_category_2019()
 
 @st.cache_data
 def import_category_2016():
@@ -43,8 +41,7 @@ def import_category_2016():
     
     #renaming to english and to standardize
     df_2016.rename({
-        # the five official regions of Brazil based on shared characteristics, like climate or vegetation.
-        'MACRO': 'Macro-Region',
+        'MACRO': 'Macro-Region', # the five official regions of Brazil based on shared characteristics, like climate or vegetation.
         'UF': 'State',
         'MUNICIPIO': 'City',
         'REGIAO_TURISTICA': 'Tourist Region',
@@ -56,9 +53,7 @@ def import_category_2016():
         'CODIGO_MUNICIPIO': 'City Code'}, axis='columns', inplace=True)
     return df_2016
 
-
 df_2016 = import_category_2016()
-
 
 @st.cache_data
 def import_category_2017():
@@ -82,5 +77,19 @@ def import_category_2017():
 
 df_2017 = import_category_2017()
 
-## merge all columns and make filters
-## decide which information is going to be where
+#adding a column to each df and concating the dataframes
+df_2019['Year'] = 2019
+df_2016['Year'] = 2016
+df_2017['Year'] = 2017
+
+df_time = pd.concat([df_2019, df_2016, df_2017])
+
+# ---- general settings for charts
+template_dash = "plotly_white"
+bg_color_dash = "rgba(0,0,0,0)"
+colors = ['#003f5c','#374c80','#7a5195','#bc5090','#ef5675','#ed9231','#f2ff49']
+
+
+############
+#Dashboard/Analysis Main Panel
+
