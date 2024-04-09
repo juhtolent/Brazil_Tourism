@@ -45,17 +45,26 @@ with col2:
                 ''', unsafe_allow_html=True)
 
 # ----- page explanation
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
 with col1:
     with st.container(border=True):
         st.markdown("### 🛫 Data Analysis and Dashboard")
         st.markdown(
-            "This project tackles the question **:blue[Where should we travel to?]** by leveraging Brazil Tourism data analysis.he accompanying interactive dashboard allows users to filter and visualize travel options, empowering informed vacation planning. ")
+            '''This project tackles the question **:blue[Where should we travel to?]** by leveraging Brazil 
+            Tourism data analysis.''')
         st.caption(
             "Skills showcased: Python [Pandas, Plotly, Seaborn], Data Visualization, Storytelling")
 
 with col2:
+    with st.container(border=True):
+        st.markdown("### 📊 Dashboard")
+        st.markdown(
+            "This interactive dashboard accompanies the anterior analyis allowing users to filter and visualize travel options, empowering informed vacation planning. ")
+        st.caption(
+            "Skills showcased: Business Intelligence, Data Visualization")
+
+with col3:
     with st.container(border=True):
         st.markdown("### 🏙️ City record")
         st.markdown("🚧Under Construction🚧")
