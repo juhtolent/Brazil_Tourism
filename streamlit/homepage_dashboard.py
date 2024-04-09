@@ -18,7 +18,7 @@ st.set_page_config(page_title="Portfólio",
 col1, col2 = st.columns([2, 8])
 
 with col1:
-    st.markdown(info['Photo'], unsafe_allow_html=True)
+    st.markdown(f'''<br> {info['Photo']}''', unsafe_allow_html=True)
 
 with col2:
     st.title(f"Hi! I'm {info['Name']}!👋")
@@ -30,10 +30,10 @@ with col2:
     st.markdown(f'''
                 [![Linkedin Badge](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)]({
                 info['Linkedin']})
-                [![Microsoft Outlook Badge](https://img.shields.io/badge/-Email-0078D4?style=flat-square&logo=microsoft-outlook&logoColor=white)](mailto:julia.mtolentino@hotmail.com{
-                info['Email']})
                 [![Github Badge](https://img.shields.io/badge/GitHub-100000?style=flat-square&logo=github&logoColor=white)]({
                 info['Github']})
+                [![Microsoft Outlook Badge](https://img.shields.io/badge/-Email-0078D4?style=flat-square&logo=microsoft-outlook&logoColor=white)](mailto:julia.mtolentino@hotmail.com{
+                info['Email']})
                 ''', unsafe_allow_html=True)
 
 # ----- page explanation
