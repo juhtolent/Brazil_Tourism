@@ -1,21 +1,29 @@
-import pandas as pd
-import numpy as np
 import streamlit as st
-import plotly.express as px
 from parameters import *
 from st_pages import Page, Section, add_page_title, show_pages
 
 
-st.set_page_config(page_title="Portfólio",
-                   layout="wide",  # centered
+st.set_page_config(page_title="Portfolio",
+                   layout="wide",
                    page_icon="📊",
                    initial_sidebar_state="expanded",
                    menu_items={
                        'About': info['About']
                    })
 
+# ----- setting pages
+# show_pages(
+#    [
+# Page(r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\streamlit\homepage_dashboard.py", "Homepage", ":books:")
+# Page("C:\Users\julia\Documents\GitHub\Brazil_Tourism\streamlit\pages\analysis_dash.py", "Dash Macro", ":bar_chart:")
+# Page("pages/dash_micro.py", "Dash Micro", ":female-student:"),
+# Page("pages/filtro_base.py", "Filtro e Download Base", ":pushpin:"),
+# Page("pages/one_page.py", "Informações Gerais e Históricas", ":1234:"),
+#    ]
+# )
+
 # ----- introduction
-col1, col2 = st.columns([2, 8])
+col1, col2 = st.columns([2, 6])
 
 with col1:
     st.markdown(f'''<br> {info['Photo']}''', unsafe_allow_html=True)
@@ -28,10 +36,10 @@ with col2:
 
 # ----- credentials
     st.markdown(f'''
-                [![Linkedin Badge](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)]({
-                info['Linkedin']})
                 [![Github Badge](https://img.shields.io/badge/GitHub-100000?style=flat-square&logo=github&logoColor=white)]({
                 info['Github']})
+                [![Linkedin Badge](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)]({
+                info['Linkedin']})
                 [![Microsoft Outlook Badge](https://img.shields.io/badge/-Email-0078D4?style=flat-square&logo=microsoft-outlook&logoColor=white)](mailto:julia.mtolentino@hotmail.com{
                 info['Email']})
                 ''', unsafe_allow_html=True)
