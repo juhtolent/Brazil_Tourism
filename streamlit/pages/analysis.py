@@ -153,21 +153,44 @@ with st.expander("Quick explanation about the Tourism Map"):
 
 st.markdown('''<h5 style> 1. Overall database overview </h5>''',
             unsafe_allow_html=True)
-col1, col2 = st.columns([1, 3])
+
+col1, col2 = st.columns([1, 2])
 with col1:
     with st.container(border=True):
         st.markdown('''<h6 style='text-align: center;'> 
                     Total number of cities classified 
                     </h6>''', unsafe_allow_html=True)
 
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric(label="2019", value=len(df[df['Year'] == 2019]))
+        col11, col12, col13 = st.columns(3)
+        with col11:
+            value = len(df[df['Year'] == 2016])
+            st.metric(label="2016", value=value)
 
-        with col2:
-            st.metric(label="2017", value=len(df[df['Year'] == 2017]))
+        with col12:
+            value = len(df[df['Year'] == 2017])
+            delta = round((len(df[df['Year'] == 2017]) -
+                           len(df[df['Year'] == 2016]))/len(df[df['Year'] == 2016])*100)
+            st.metric(label="2017", value=value, delta=str(delta)+"%")
 
-        with col3:
-            st.metric(label="2016", value=len(df[df['Year'] == 2016]))
+        with col13:
+            value = len(df[df['Year'] == 2019])
+            delta = round((len(df[df['Year'] == 2019]) -
+                           len(df[df['Year'] == 2017]))/len(df[df['Year'] == 2017])*100)
+            st.metric(label="2019", value=value, delta=str(delta)+"%")
 
-# st.table(df.describe())
+        st.markdown('''Yearly data has varying city counts - In 2016, every Brazilian city was included (5570), however there was a decline in subsequent years.
+                    This means some Brazilian cities have incomplete historical data. The reason for the variation in 
+                    remains unclear and could not be found.''', unsafe_allow_html=True)
+
+with col2:
+    tab1, tab2 = st.tabs(['Headers', 'Zeros'])
+
+    # headers => explain
+    ###
+
+    # zeros analysis and conclusion
+
+## quantitative 
+
+st.markdown('''<h5 style> 1. Overall database overview </h5>''',
+            unsafe_allow_html=True)
