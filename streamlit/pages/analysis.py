@@ -328,7 +328,8 @@ st.markdown('''
             <br>
             ''', unsafe_allow_html=True)
 
-
+with st.expander("Further analysis on categories D & E"):
+    df_de = df.loc[(df['Category'] == 'D') | (df['Category'] == 'E')]
 # expander with cat D&E Analysis [[!!!!!]]
 # 2 columns: yxy and cat stability
 # end with filtering by location
