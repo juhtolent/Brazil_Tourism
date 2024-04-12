@@ -249,7 +249,7 @@ with col2:
             table, columns=['Header', 'Definition'])
 
         st.dataframe(columns_explained)
-
+# Category Analysis
 st.markdown('''<h5 style> 2. Category Analysis </h5>''',
             unsafe_allow_html=True)
 
@@ -260,7 +260,6 @@ with col1:
         'Select the year you would like to filter:',
         (2019, 2017, 2016))
 
-
 st.markdown('''<h6 style='text-align: center;'>
             Distribution of each variable according to the categories
             </h6>''', unsafe_allow_html=True)
@@ -268,7 +267,7 @@ st.markdown('''<h6 style='text-align: center;'>
 # first, the components to filter the df
 df_chart = df[df['Year'] == option].sort_values('Category')
 
-# function of boxplot to facilitate showing it on the webapp
+# function of boxplot
 
 
 def boxplot(variable):
@@ -307,7 +306,29 @@ with col2:
     st.plotly_chart(boxplot("International Tourists"))
 
 # ANALYSIS
+st.markdown('''
+            Looking at the numbers above, there are noteworthy trends that need to be discussed:
+
+            1) <b> MEAN versus MEDIAN:</b> In this dataset, there is a significant distance between both metrics, signalizing that 
+            there many outliers and internal groups that can be categorized.
+            2)<b> OUTLIERS ON TOURIST DATA </b>: We see a few outliers, particularly for 
+            domestic and international tourists. Further investigation is needed to determine 
+            if these are data errors or represent genuinely high tourist volumes for specific cities.
+            3) <b> HIGH INFRAESTRUCTURE CITIES </b>: Cities ranked A and B show a significantly 
+            higher number of jobs and establishments compared to other categories. This suggests these cities have 
+            a strong tourist infrastructure which is one of the primary focus of this analysis. 
+            The larger range in category A data also indicates more variation in infrastructure within this group.
+            4) <b> CATEGORIES D & E </b>: While categories D and E appear to have less interesting data initially. A close look shows that:
+            - <b> CATEGORY D: </b> There are some outliers in terms of visitors and workers, but the number of establishments 
+            is significantly distorted. This could indicate a data source error or that the city is genuinely not very interesting. I
+            t is recommended to prioritize other cities when choosing a destination.
+            - <b> CATEGORY E: </b> Almost all data points are 0, suggesting that these cities are likely not very interesting 
+            for tourism. They may be considered for historical analysis, but they are not likely to be attractive destinations 
+            for visitors.
+            <br>
+            ''', unsafe_allow_html=True)
+
+
 # expander with cat D&E Analysis [[!!!!!]]
 # 2 columns: yxy and cat stability
-
 # end with filtering by location
