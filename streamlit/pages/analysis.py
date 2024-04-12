@@ -253,4 +253,9 @@ with col2:
 st.markdown('''<h5 style> 2. Category Analysis </h5>''',
             unsafe_allow_html=True)
 
-# make a tab/exapander about quantitative measures
+# make boxplot of all 4 quantitative measures
+# filter it by state and year
+# expander with cat D&E Analysis
+# 2 columns: yxy and cat stability
+
+# end with filtering by location
