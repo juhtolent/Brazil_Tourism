@@ -253,6 +253,34 @@ with col2:
 st.markdown('''<h5 style> 2. Category Analysis </h5>''',
             unsafe_allow_html=True)
 
+# Filtered boxplot
+df_chart = df.sort_values('Category')
+fig = make_subplots(rows=1, cols=2)
+
+# boxplot
+fig = px.box(
+    df_chart,
+    x="Category",
+    y="Establishments",
+    template=template_dash,
+    color="Category",
+    width=500,
+    height=350
+)
+fig.update_layout(
+    plot_bgcolor=bg_color_dash,
+    title={
+        'text': "<b> Establishments </b>",
+        'y': 0.9,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'
+    })
+
+fig.update_traces(boxmean=True)
+fig.update_yaxes(range=[0, 800])
+
+st.plotly_chart(fig)
 # make boxplot of all 4 quantitative measures
 # filter it by state and year
 # expander with cat D&E Analysis
