@@ -253,37 +253,61 @@ with col2:
 st.markdown('''<h5 style> 2. Category Analysis </h5>''',
             unsafe_allow_html=True)
 
-# Filtered boxplot
-df_chart = df.sort_values('Category')
-fig = make_subplots(rows=1, cols=2)
+# Filtered boxplots
+col1, space = st.columns([1, 3])
+with col1:
+    option = st.selectbox(
+        'Select the year you would like to filter:',
+        (2019, 2017, 2016))
 
-# boxplot
-fig = px.box(
-    df_chart,
-    x="Category",
-    y="Establishments",
-    template=template_dash,
-    color="Category",
-    width=500,
-    height=350
-)
-fig.update_layout(
-    plot_bgcolor=bg_color_dash,
-    title={
-        'text': "<b> Establishments </b>",
-        'y': 0.9,
-        'x': 0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'
-    })
 
-fig.update_traces(boxmean=True)
-fig.update_yaxes(range=[0, 800])
+st.markdown('''<h6 style='text-align: center;'>
+            Distribution of each variable according to the categories
+            </h6>''', unsafe_allow_html=True)
 
-st.plotly_chart(fig)
-# make boxplot of all 4 quantitative measures
-# filter it by state and year
-# expander with cat D&E Analysis
+# first, the components to filter the df
+df_chart = df[df['Year'] == option].sort_values('Category')
+
+# function of boxplot to facilitate showing it on the webapp
+
+
+def boxplot(variable):
+    fig = px.box(
+        df_chart,
+        x="Category",
+        y=variable,
+        template=template_dash,
+        color="Category",
+        width=500,
+        height=350,
+        color_discrete_sequence=colors
+    )
+    fig.update_layout(
+        plot_bgcolor=bg_color_dash,
+        title={
+            'text': f"<b> {variable} </b>",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        })
+
+    fig.update_traces(boxmean=True)
+
+    return fig
+
+
+col1, col2 = st.columns(2)
+with col1:
+    st.plotly_chart(boxplot("Jobs"))
+    st.plotly_chart(boxplot("Domestic Tourists"))
+
+with col2:
+    st.plotly_chart(boxplot("Establishments"))
+    st.plotly_chart(boxplot("International Tourists"))
+
+# ANALYSIS
+# expander with cat D&E Analysis [[!!!!!]]
 # 2 columns: yxy and cat stability
 
 # end with filtering by location
