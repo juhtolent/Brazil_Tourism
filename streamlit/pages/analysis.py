@@ -221,11 +221,11 @@ with col2:
                                )
             st.plotly_chart(fig, use_container_width=True)
 
-        st.markdown('''All cells of the year 2019 have information in them, there isn't a single null object in this dataset. 
-                    However, on most columns, the lower quartile is 0, and also the histogram shows that a good chunk of the data is 0. 
-                    Therefore, it seems that what would be null/empty was replaced by 0. Upon further analysis, 
-                    this pattern persists across all historical datasets, suggesting that these zeros are intentional 
-                    and hold meaning within the context of the data. It is also worth pointing out 
+        st.markdown('''All cells of the year 2019 have information in them, there isn't a single null object in this dataset.
+                    However, on most columns, the lower quartile is 0, and also the histogram shows that a good chunk of the data is 0.
+                    Therefore, it seems that what would be null/empty was replaced by 0. Upon further analysis,
+                    this pattern persists across all historical datasets, suggesting that these zeros are intentional
+                    and hold meaning within the context of the data. It is also worth pointing out
                     that all rows contain cities categorized as D and E, which are expected to have lower values.
                     ''', unsafe_allow_html=True)
 
@@ -309,21 +309,21 @@ with col2:
 st.markdown('''
             Looking at the numbers above, there are noteworthy trends that need to be discussed:
 
-            1) <b> MEAN versus MEDIAN:</b> In this dataset, there is a significant distance between both metrics, signalizing that 
+            1) <b> MEAN versus MEDIAN:</b> In this dataset, there is a significant distance between both metrics, signalizing that
             there many outliers and internal groups that can be categorized.
-            2)<b> OUTLIERS ON TOURIST DATA </b>: We see a few outliers, particularly for 
-            domestic and international tourists. Further investigation is needed to determine 
+            2)<b> OUTLIERS ON TOURIST DATA </b>: We see a few outliers, particularly for
+            domestic and international tourists. Further investigation is needed to determine
             if these are data errors or represent genuinely high tourist volumes for specific cities.
-            3) <b> HIGH INFRAESTRUCTURE CITIES </b>: Cities ranked A and B show a significantly 
-            higher number of jobs and establishments compared to other categories. This suggests these cities have 
-            a strong tourist infrastructure which is one of the primary focus of this analysis. 
+            3) <b> HIGH INFRAESTRUCTURE CITIES </b>: Cities ranked A and B show a significantly
+            higher number of jobs and establishments compared to other categories. This suggests these cities have
+            a strong tourist infrastructure which is one of the primary focus of this analysis.
             The larger range in category A data also indicates more variation in infrastructure within this group.
             4) <b> CATEGORIES D & E </b>: While categories D and E appear to have less interesting data initially. A close look shows that:
-            - <b> CATEGORY D: </b> There are some outliers in terms of visitors and workers, but the number of establishments 
+            - <b> CATEGORY D: </b> There are some outliers in terms of visitors and workers, but the number of establishments
             is significantly distorted. This could indicate a data source error or that the city is genuinely not very interesting. I
             t is recommended to prioritize other cities when choosing a destination.
-            - <b> CATEGORY E: </b> Almost all data points are 0, suggesting that these cities are likely not very interesting 
-            for tourism. They may be considered for historical analysis, but they are not likely to be attractive destinations 
+            - <b> CATEGORY E: </b> Almost all data points are 0, suggesting that these cities are likely not very interesting
+            for tourism. They may be considered for historical analysis, but they are not likely to be attractive destinations
             for visitors.
             <br>
             ''', unsafe_allow_html=True)
@@ -381,6 +381,60 @@ with st.expander("Further analysis on categories D & E"):
     with col2:
         st.plotly_chart(histplot("Establishments"))
         st.plotly_chart(histplot("International Tourists"))
-# expander with cat D&E Analysis [[!!!!!]]
+
+# Year comparison
+col1, col2 = st.columns(2)
+with col1:
+    # year categorization percentage
+    df_time_pivot_category = pd.pivot_table(data=df,
+                                            values='City',
+                                            index='Year',
+                                            columns=['Category'],
+                                            fill_value=0,
+                                            aggfunc='count',
+                                            margins=True)
+
+    df_time_pivot_category = df_time_pivot_category.div(
+        df_time_pivot_category.iloc[:, -1], axis=0).iloc[:-1, :-1]
+    df_time_pivot_category = df_time_pivot_category.mul(100, fill_value=0)
+
+    # chart
+    fig = px.bar(
+        df_time_pivot_category,
+        color_discrete_sequence=colors,
+        category_orders={'Year': [2016, 2017, 2019]},
+        template=template_dash,
+        orientation='h',
+        width=500
+    )
+
+    fig.update_traces(
+        texttemplate='%{x:,.2f}%',
+        textposition='inside',
+        textfont_size=11,
+        textangle=0,
+        insidetextanchor='middle',
+        hovertemplate='%{x:,.2f}%')
+
+    fig.update_layout(
+        plot_bgcolor=bg_color_dash,
+        title={
+            'text': "<b> % Category distribution accross the years </b>",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        xaxis=dict(
+            title='% Percentage'
+        ),
+        yaxis=dict(
+            title='Year',
+            type='category'
+        )
+    )
+
+    st.plotly_chart(fig)
+
 # 2 columns: yxy and cat stability
 # end with filtering by location

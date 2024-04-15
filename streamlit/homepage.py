@@ -45,7 +45,7 @@ with col2:
                 ''', unsafe_allow_html=True)
 
 # ----- page explanation
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
     with st.container(border=True):
@@ -64,7 +64,7 @@ with col2:
         st.caption(
             "Skills showcased: Business Intelligence, Data Visualization")
 
-with col3:
-    with st.container(border=True):
-        st.markdown("### 🏙️ City record")
-        st.markdown("🚧Under Construction🚧")
+# with col3:
+#    with st.container(border=True):
+#        st.markdown("### 🏙️ City record")
+#       st.markdown("🚧Under Construction🚧")
