@@ -382,6 +382,9 @@ with st.expander("Further analysis on categories D & E"):
         st.plotly_chart(histplot("Establishments"))
         st.plotly_chart(histplot("International Tourists"))
 
+st.markdown('''<h5 style> 2.1. Time analysis </h5>''',
+            unsafe_allow_html=True)
+
 # Year comparison
 col1, col2 = st.columns(2)
 with col1:
@@ -457,9 +460,13 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown('''
-                Categorization stability: This refers to how consistently a city falls within certain categories across the years. 
-                To measure this stability, I propose a method that assigns numerical values to each category. 
-                By summing these values across different points in time, we can identify cities with more consistent categorizations.
+                <b> Categorization stability </b> : This refers to how consistently a city falls within 
+                certain categories across the years. 
+                <br>
+                To measure this stability, I propose a method that assigns numerical values to each category. By 
+                summing these values across different points in time, we can identify cities with more 
+                consistent categorizations.
+                <br>
                 <br>
                 |Category | A | B | C | D | E |
                 |---------------|---|---|---|---|---|
@@ -488,6 +495,47 @@ df['Category Number'] = df['Category'].apply(category_number)
 # sum of all values
 df['Category Stability'] = df.groupby(
     'City Code')['Category Number'].transform('sum')
+
+with col2:
+    df_time_pivot_stability = pd.pivot_table(data=df[df['Year'] == 2019],
+                                             values='City',
+                                             index='Category Stability',
+                                             columns=['Category'],
+                                             fill_value=0,
+                                             aggfunc='count',
+                                             margins=True)
+
+    fig = px.imshow(df_time_pivot_stability.iloc[:-1, :-1],
+                    text_auto=True,
+                    color_continuous_scale='Agsunset',
+                    aspect='auto')
+
+    fig.update_layout(xaxis=dict(title='Category in 2019',
+                                 side='top'),
+                      yaxis=dict(type='category'),
+                      autosize=False
+                      )
+
+    fig.update_traces(textfont=dict(size=8))
+    st.plotly_chart(fig, use_container_width=True)
+
+st.markdown('''
+            Seeing the heatmap, there is a clear distinction between category A and categories B and C 
+            regarding classification stability over time.
+            <br>
+            - <b> Category A </b>: A significant majority (77%, or 44 out of 57 cities) within category A maintained 
+            their classification. This suggests a high level of stability in infrastructure for these top-ranked 
+            destinations.  
+            - <b> Categories B & C </b>: A lower proportion of cities in categories B (49%, or 110 out of 221) and 
+            C (54%, or 230 out of 419) retained their classifications. This indicates greater fluctuation in 
+            infrastructure development within these categories. Therefore, while interesting destinations exist 
+            across categories A, B, and C, prioritizing cities in category A is recommended due to their 
+            consistent infrastructure quality.
+            <br>
+            It is important to note that, as 2019 represents the most recent classification data available, 
+            our primary focus should be on cities analyzed in that year to ensure the most up-to-date information 
+            guides decision-making.
+            ''', unsafe_allow_html=True)
 
 
 # end with filtering by location
