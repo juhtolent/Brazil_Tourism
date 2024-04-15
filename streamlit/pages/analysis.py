@@ -311,7 +311,7 @@ st.markdown('''
 
             1) <b> MEAN versus MEDIAN:</b> In this dataset, there is a significant distance between both metrics, signalizing that
             there many outliers and internal groups that can be categorized.
-            2)<b> OUTLIERS ON TOURIST DATA </b>: We see a few outliers, particularly for
+            2) <b> OUTLIERS ON TOURIST DATA </b>: We see a few outliers, particularly for
             domestic and international tourists. Further investigation is needed to determine
             if these are data errors or represent genuinely high tourist volumes for specific cities.
             3) <b> HIGH INFRAESTRUCTURE CITIES </b>: Cities ranked A and B show a significantly
@@ -436,5 +436,58 @@ with col1:
 
     st.plotly_chart(fig)
 
-# 2 columns: yxy and cat stability
+with col2:
+    st.markdown('''
+                The total number of destinations in <b>category A</b> remains relatively stable over time. 
+                <br>
+                However, there are significant changes in <b>categories B and C</b>. This is likely due to a shift 
+                in categorization methodology, possibly coinciding with the inclusion of all 5,570 Brazilian cities 
+                in 2016. 
+                <br>
+                This explains the higher number of destinations in <b>categories D and E</b> in that year 
+                compared to subsequent years. The reason for the variation in total city count between 2017 and 
+                2019 remains unclear and could not be found.
+                <br>
+                <br>
+                Therefore, a good parameter to assess a city's appeal for visitors should be the stability of 
+                its categorization over time.
+                ''', unsafe_allow_html=True)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown('''
+                Categorization stability: This refers to how consistently a city falls within certain categories across the years. 
+                To measure this stability, I propose a method that assigns numerical values to each category. 
+                By summing these values across different points in time, we can identify cities with more consistent categorizations.
+                <br>
+                |Category | A | B | C | D | E |
+                |---------------|---|---|---|---|---|
+                |Value| 4 | 3 | 2 | 1 | 0 | 
+                ''', unsafe_allow_html=True)
+
+# categorizing data
+
+
+def category_number(category):
+    if category == 'A':
+        return 4
+    elif category == 'B':
+        return 3
+    elif category == 'C':
+        return 2
+    elif category == 'D':
+        return 1
+    else:
+        return 0
+
+
+# assigning each row a number according to the category
+df['Category Number'] = df['Category'].apply(category_number)
+
+# sum of all values
+df['Category Stability'] = df.groupby(
+    'City Code')['Category Number'].transform('sum')
+
+
 # end with filtering by location
