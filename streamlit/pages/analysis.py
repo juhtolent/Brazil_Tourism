@@ -330,6 +330,57 @@ st.markdown('''
 
 with st.expander("Further analysis on categories D & E"):
     df_de = df.loc[(df['Category'] == 'D') | (df['Category'] == 'E')]
+    st.markdown('''The conclusions written above can be seen on the charts below.
+                ''', unsafe_allow_html=True)
+    # Filtered boxplots
+    col1, space = st.columns([1, 3])
+    with col1:
+        option = st.selectbox(
+            'Select the year to filter:',
+            (2019, 2017, 2016))
+
+    st.markdown('''<h6 style='text-align: center;'>
+                Distribution of each variable according to the categories
+                </h6>''', unsafe_allow_html=True)
+
+    # first, the components to filter the df
+    df_chart = df_de[df_de['Year'] == option].sort_values('Category')
+
+    # function of boxplot
+
+    def histplot(variable):
+        fig = px.histogram(
+            df_chart,
+            y=variable,
+            template=template_dash,
+            marginal="rug",
+            color="Category",
+            width=500,
+            height=350,
+            color_discrete_map={'D': '#bc5090', 'E': '#EA1F48'},
+
+            text_auto=True
+        )
+        fig.update_layout(
+            plot_bgcolor=bg_color_dash,
+            title={
+                'text': f"<b> {variable} </b>",
+                'y': 0.9,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'
+            })
+
+        return fig
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(histplot("Jobs"))
+        st.plotly_chart(histplot("Domestic Tourists"))
+
+    with col2:
+        st.plotly_chart(histplot("Establishments"))
+        st.plotly_chart(histplot("International Tourists"))
 # expander with cat D&E Analysis [[!!!!!]]
 # 2 columns: yxy and cat stability
 # end with filtering by location
