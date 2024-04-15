@@ -471,6 +471,10 @@ with col1:
                 |Category | A | B | C | D | E |
                 |---------------|---|---|---|---|---|
                 |Value| 4 | 3 | 2 | 1 | 0 | 
+                <br>
+                It is important to note that, as 2019 represents the most recent classification data available, 
+                our primary focus should be on cities analyzed in that year to ensure the most up-to-date information 
+                guides decision-making.
                 ''', unsafe_allow_html=True)
 
 # categorizing data
@@ -505,37 +509,41 @@ with col2:
                                              aggfunc='count',
                                              margins=True)
 
+    # chart
     fig = px.imshow(df_time_pivot_stability.iloc[:-1, :-1],
                     text_auto=True,
                     color_continuous_scale='Agsunset',
                     aspect='auto')
 
     fig.update_layout(xaxis=dict(title='Category in 2019',
-                                 side='top'),
+                                 side='bottom'),
                       yaxis=dict(type='category'),
-                      autosize=False
-                      )
+                      autosize=False,
+                      title={
+        'text': "<b> % Category distribution accross the years </b>",
+        'y': 0.95,
+        'x': 0.45,
+        'xanchor': 'center',
+        'yanchor': 'top'}
+    )
 
     fig.update_traces(textfont=dict(size=8))
+
     st.plotly_chart(fig, use_container_width=True)
 
 st.markdown('''
-            Seeing the heatmap, there is a clear distinction between category A and categories B and C 
-            regarding classification stability over time.
-            <br>
-            - <b> Category A </b>: A significant majority (77%, or 44 out of 57 cities) within category A maintained 
-            their classification. This suggests a high level of stability in infrastructure for these top-ranked 
-            destinations.  
-            - <b> Categories B & C </b>: A lower proportion of cities in categories B (49%, or 110 out of 221) and 
-            C (54%, or 230 out of 419) retained their classifications. This indicates greater fluctuation in 
-            infrastructure development within these categories. Therefore, while interesting destinations exist 
-            across categories A, B, and C, prioritizing cities in category A is recommended due to their 
-            consistent infrastructure quality.
-            <br>
-            It is important to note that, as 2019 represents the most recent classification data available, 
-            our primary focus should be on cities analyzed in that year to ensure the most up-to-date information 
-            guides decision-making.
-            ''', unsafe_allow_html=True)
+        Seeing the heatmap, there is a clear distinction between category A and categories B and C 
+        regarding classification stability over time.
+        <br>
+        - <b> Category A </b>: A significant majority (77%, or 44 out of 57 cities) within category A maintained 
+        their classification. This suggests a high level of stability in infrastructure for these top-ranked 
+        destinations.  
+        - <b> Categories B & C </b>: A lower proportion of cities in categories B (49%, or 110 out of 221) and 
+        C (54%, or 230 out of 419) retained their classifications. This indicates greater fluctuation in 
+        infrastructure development within these categories. Therefore, while interesting destinations exist 
+        across categories A, B, and C, prioritizing cities in category A is recommended due to their 
+        consistent infrastructure quality.
+        ''', unsafe_allow_html=True)
 
 
 # end with filtering by location
