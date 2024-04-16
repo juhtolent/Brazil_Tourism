@@ -576,7 +576,7 @@ with col1:
         min_value=df_selection['Category Stability'].min().astype(int),
         max_value=df_selection['Category Stability'].max().astype(int),
         value=df_selection['Category Stability'].max().astype(int),
-        help='a')
+        help=':red[[add explanation]]')
 
 
 # first think of layout and then filter
