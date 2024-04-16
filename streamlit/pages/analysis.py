@@ -546,4 +546,38 @@ st.markdown('''
         ''', unsafe_allow_html=True)
 
 
+# location
+st.markdown('''<h5 style> 3. Location </h5>''',
+            unsafe_allow_html=True)
+
+# filters
+
+st.markdown(''':red[[add explanation]]''', unsafe_allow_html=True)
+
+
+col1, space = st.columns([1, 5])
+
+with col1:
+    state = st.selectbox(
+        "Select the state:",
+        options=df[df['Year'] == 2019]['State'].sort_values().unique()
+    )
+
+    # it only shows city within the state chosen
+    df_selection = df[df['Year'] == 2019].query("State == @state")
+
+    city = st.selectbox(
+        "Select the city:",
+        options=df_selection['City'].sort_values().unique()
+    )
+
+    min_category_stability = st.slider(
+        "Select a minimum for the category stability variable:",
+        min_value=df_selection['Category Stability'].min().astype(int),
+        max_value=df_selection['Category Stability'].max().astype(int),
+        value=df_selection['Category Stability'].max().astype(int),
+        help='a')
+
+
+# first think of layout and then filter
 # end with filtering by location
