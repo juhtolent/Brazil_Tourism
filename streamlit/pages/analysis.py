@@ -551,7 +551,10 @@ st.markdown('''<h5 style> 3. Location </h5>''',
             unsafe_allow_html=True)
 
 # filters
-st.markdown('''FIXME: add explanation of calculation''',
+st.markdown('''To get a more accurate distance calculation, we will use the haversine formula to
+             measure the distance between two cities. This formula provides a more accurate measure of
+             distance compared to simpler methods, especially for long distances. By accounting for the Earth's
+             curvature, it offers a realistic representation of the shortest path between two locations.''',
             unsafe_allow_html=True)
 
 
@@ -560,7 +563,8 @@ col1, space = st.columns([1, 5])
 with col1:
     city = st.selectbox(
         "Select the city:",
-        options=df[df['Year'] == 2019]['City'].sort_values().unique()
+        options=df[df['Year'] == 2019]['City'].sort_values().unique(),
+        help="you"
     )
 
     min_category_stability = st.slider(
@@ -571,7 +575,7 @@ with col1:
                      2019]['Category Stability'].max().astype(int),
         value=df[df['Year'] == 2019]['Category Stability'].max().astype(int),
         help='FIXME:add help')
-    
+
     # quantity_cities = st.slider(
     #     "Select how many cities you want:",
     #     min_value=1,
@@ -580,7 +584,6 @@ with col1:
     #     help='FIXME:add help')
 
 
-## adjust jupyter notebook to include distance calculation from são paulo and limit to 10 answers
-## here: add latlong csv to the df > adjust filters [add button] and calculate distance >
-## add download button for table (in xlsx) > insert a map o/
- 
+# here: add latlong csv to the df > adjust filters [add button] and calculate distance >
+# add download button for table (in xlsx) > insert a map o/
+ # MAKE SMTH FOR PEOPLE FROM THE OUTSIDE OF BRASIL (AIRPORTS?)
