@@ -557,14 +557,49 @@ st.markdown('''To get a more accurate distance calculation, we will use the have
              curvature, it offers a realistic representation of the shortest path between two locations.''',
             unsafe_allow_html=True)
 
+# adding lat/long to the dataframe
+
+
+@st.cache_data
+def import_latlong():
+    # adding lat/long to the dataframe
+    df_latlong = pd.read_csv(
+        r'C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\BR_cities_latlong.csv', delimiter=',')
+
+    # renaming to english and to standardize
+    # renaming to english and to standardize
+    df_latlong.rename({
+        'codigo_ibge': 'City Code',
+        'nome': 'City',
+        'latitude': 'Latitude',
+        'longitude': 'Longitude',
+        'capital': 'Is Capital City',  # each state has a capital in Brazil,
+        'codigo_uf': 'State Code',
+        'siafi_id': 'Siafi ID',  # code for government administrative processes
+        'ddd': 'Area Code',
+        'fuso_horario': 'Time Zone'
+    }, axis='columns', inplace=True)
+    return df_latlong
+
+
+df_latlong = import_latlong()
+
+# merging both dfs
+df = pd.merge(df,
+              # selecting only lat/long information
+              df_latlong[['City Code', 'Latitude', 'Longitude']],
+              how='left',
+              on='City Code')
 
 col1, space = st.columns([1, 5])
 
 with col1:
+
+    # FIXME: add the possibility of filtering only cities with airports and output the airport code (ex.: GRU)
     city = st.selectbox(
         "Select the city:",
         options=df[df['Year'] == 2019]['City'].sort_values().unique(),
-        help="you"
+        help="You can write the city"
     )
 
     min_category_stability = st.slider(
@@ -583,7 +618,38 @@ with col1:
     #     value=df[df['Year'] == 2019]['Category Stability'].max().astype(int),
     #     help='FIXME:add help')
 
+# function for calculating the distance
 
+
+def haversine_distance(lat1, lon1, lat2, lon2):
+    r = 6371  # Earth radious
+    phi1 = np.radians(lat1)
+    phi2 = np.radians(lat2)
+    delta_phi = np.radians(lat2 - lat1)
+    delta_lambda = np.radians(lon2 - lon1)
+    a = np.sin(delta_phi / 2)**2 + np.cos(phi1) * \
+        np.cos(phi2) * np.sin(delta_lambda / 2)**2
+    res = r * (2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a)))
+    return np.round(res, 2)
+
+
+# defining my home town as a parameter of comparison
+# important to note that this is adaptable in the streamlit
+home_lat = df[(df['City'] == city)]['Latitude'].iloc[0]
+home_long = df[(df['City'] == city)]['Longitude'].iloc[0]
+
+distance_km = []
+for ind in df.index:
+    distance_km.append(haversine_distance(
+        home_lat, home_long, df['Latitude'].iloc[ind], df['Longitude'].iloc[ind]))
+
+df['Distance in km'] = distance_km
+
+result = df[(df['Year'] == 2019) &
+            (df['Category Stability'] >= min_category_stability)
+            ].sort_values(by='Distance in km', ascending=True).head(10)
+
+st.dataframe(result)
 # here: add latlong csv to the df > adjust filters [add button] and calculate distance >
 # add download button for table (in xlsx) > insert a map o/
- # MAKE SMTH FOR PEOPLE FROM THE OUTSIDE OF BRASIL (AIRPORTS?)
+# MAKE SMTH FOR PEOPLE FROM THE OUTSIDE OF BRASIL (AIRPORTS?)
