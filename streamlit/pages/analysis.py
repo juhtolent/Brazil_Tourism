@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import plotly.express as px
+import re
 import io
 
 
@@ -591,34 +592,8 @@ df = pd.merge(df,
               how='left',
               on='City Code')
 
-col1, space = st.columns([1, 5])
-
-with col1:
-
-    # FIXME: add the possibility of filtering only cities with airports and output the airport code (ex.: GRU)
-    city = st.selectbox(
-        "Select the city:",
-        options=df[df['Year'] == 2019]['City'].sort_values().unique(),
-        help="You can write the city"
-    )
-
-    min_category_stability = st.slider(
-        "Select a minimum for the category stability variable:",
-        min_value=df[df['Year'] ==
-                     2019]['Category Stability'].min().astype(int),
-        max_value=df[df['Year'] ==
-                     2019]['Category Stability'].max().astype(int),
-        value=df[df['Year'] == 2019]['Category Stability'].max().astype(int),
-        help='FIXME:add help')
-
-    # quantity_cities = st.slider(
-    #     "Select how many cities you want:",
-    #     min_value=1,
-    #     max_value=len(),
-    #     value=df[df['Year'] == 2019]['Category Stability'].max().astype(int),
-    #     help='FIXME:add help')
-
-# function for calculating the distance
+# function for calculating the distance of lat/long
+# this function will be used for airport calculation as well as determining closest cities
 
 
 def haversine_distance(lat1, lon1, lat2, lon2):
@@ -633,7 +608,102 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     return np.round(res, 2)
 
 
-# defining my home town as a parameter of comparison
+# adding airport information
+@st.cache_data
+def import_df_airport():
+    df_airport = pd.read_excel(r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\aerodromospublicos-12.xls",
+                               header=2,
+                               # this database has several columns, so I'm choosing the columns
+                               usecols=['CÓDIGO OACI',
+                                        'NOME',
+                                        'MUNICÍPIO ATENDIDO',
+                                        'UF',
+                                        'LATITUDE',
+                                        'LONGITUDE'])
+
+    # renaming to english and standardizing
+    df_airport.rename({
+        'CÓDIGO OACI': 'Code OACI',
+        'NOME': 'Airport Name',
+                'MUNICÍPIO ATENDIDO': 'City',
+                'UF': 'State',
+                'LATITUDE': 'Latitude (DD MM SS D)',
+                'LONGITUDE': 'Longitude (DD MM SS D)'}, axis='columns', inplace=True)
+
+    # airport information have lat/long in diferent format, this is changing it to decimal degrees
+    def decimal_latlong(coordinate):
+        # clean all white spaces
+        coordinate = coordinate.replace(" ", '')
+
+        # direction is the last letter, which indicates north, south, east and west
+        # in lat/long decimal degrees, these letters are represented by the "+" or "-" symbol
+        direction = coordinate[-1:]
+        N_E = direction in ('N', 'E')
+
+        # splitting the cell in multiple variables
+        degrees, minutes, seconds, junk = re.split('[°\'"]+', coordinate[0:-1])
+        coordinate = (float(degrees) + float(minutes) / 60. +
+                      float(seconds) / 3600.) * (1 if N_E else -1)
+        return coordinate
+
+    df_airport['Latitude (decimal degrees)'] = df_airport['Latitude (DD MM SS D)'].apply(
+        decimal_latlong)
+    df_airport['Longitude (decimal degrees)'] = df_airport['Longitude (DD MM SS D)'].apply(
+        decimal_latlong)
+
+    return df_airport
+
+
+df_airport = import_df_airport()
+
+# seeing that from here on to the end of this script only the 2019 df will be used,
+# i will slice the df as to optimize the cloud usage
+df = df[df['Year'] == 2019]
+
+# calculating distance  from other cities
+airport_nearby = []
+for ind in df.index:
+    lat_city = df['Latitude'].iloc[ind]
+    long_city = df['Longitude'].iloc[ind]
+    list = []
+    for ind_airport in df_airport.index:
+        lat_airport = df_airport['Latitude (decimal degrees)'].iloc[ind_airport]
+        long_airport = df_airport['Longitude (decimal degrees)'].iloc[ind_airport]
+        list.append(haversine_distance(
+            lat_city, long_city, lat_airport, long_airport))
+
+        if min(list) < 100:
+            break
+
+    airport_nearby.append(1 if min(list) < 100 else 0)
+
+df['Airport nearby'] = airport_nearby
+
+# filters
+col1, space = st.columns([1, 5])
+
+with col1:
+
+    city = st.selectbox(
+        "Select/Write the city:",
+        options=df['City'].sort_values().unique()
+    )
+
+    min_category_stability = st.slider(
+        "Select a minimum for the category stability variable:",
+        min_value=df['Category Stability'].min().astype(int),
+        max_value=df['Category Stability'].max().astype(int),
+        value=df['Category Stability'].max().astype(int),
+        help='FIXME:add help')
+
+    # quantity_cities = st.slider(
+    #     "Select how many cities you want:",
+    #     min_value=1,
+    #     max_value=len(),
+    #     value=df[df['Year'] == 2019]['Category Stability'].max().astype(int),
+    #     help='FIXME:add help')
+
+# defining the city chosen as a parameter of comparison
 # important to note that this is adaptable in the streamlit
 home_lat = df[(df['City'] == city)]['Latitude'].iloc[0]
 home_long = df[(df['City'] == city)]['Longitude'].iloc[0]
@@ -652,4 +722,3 @@ result = df[(df['Year'] == 2019) &
 st.dataframe(result)
 # here: add latlong csv to the df > adjust filters [add button] and calculate distance >
 # add download button for table (in xlsx) > insert a map o/
-# MAKE SMTH FOR PEOPLE FROM THE OUTSIDE OF BRASIL (AIRPORTS?)
