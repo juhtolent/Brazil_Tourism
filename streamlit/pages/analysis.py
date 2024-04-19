@@ -748,4 +748,5 @@ with col3:
 # adjust the stuff in the screen
 # add conclusion
 # fix FIXME
+# add requisits file
 # upload to streamlit cloud
