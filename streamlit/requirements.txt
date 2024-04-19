@@ -6,3 +6,4 @@ streamlit==1.33.0
 st_pages
 openpyxl
 xlrd
+xlsxwriter
