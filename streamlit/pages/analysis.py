@@ -552,10 +552,16 @@ st.markdown('''<h5 style> 3. Location </h5>''',
             unsafe_allow_html=True)
 
 # filters
-st.markdown('''To get a more accurate distance calculation, we will use the haversine formula to
-             measure the distance between two cities. This formula provides a more accurate measure of
-             distance compared to simpler methods, especially for long distances. By accounting for the Earth's
-             curvature, it offers a realistic representation of the shortest path between two locations.''',
+st.markdown('''
+            Beyond tourist infrastructure, location plays a crucial role in choosing a travel 
+            destination. Distance from your current location directly impacts travel time and 
+            cost. Therefore, the last step in choosing where to travel to is to evaluate cities closer to where you live, or 
+            where you will arrive by airplane.
+            <br><br>
+            To get a more accurate distance calculation, we will use the haversine formula to
+            measure the distance between two cities. This formula provides a more accurate measure of
+            distance compared to simpler methods, especially for long distances. By accounting for the Earth's
+            curvature, it offers a realistic representation of the shortest path between two locations.''',
             unsafe_allow_html=True)
 
 # adding lat/long to the dataframe
@@ -763,8 +769,3 @@ with col2:
 with col3:
     st.map(data=result[['latitude', 'longitude']],
            color='#ef5675')
-
-
-# add download button for table (in xlsx)
-# adjust the stuff in the screen
-# fix FIXME
