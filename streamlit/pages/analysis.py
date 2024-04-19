@@ -712,8 +712,6 @@ with col1:
         value=10,
         help='FIXME:add help')
 
-# dataframe/table
-with col2:
     # defining the city chosen as a parameter of comparison
     # important to note that this is adaptable in the streamlit
     home_lat = df[(df['City'] == city)]['latitude'].iloc[0]
@@ -730,6 +728,27 @@ with col2:
                      (df_2019['Category Stability'] >= min_category_stability)
                      ].sort_values(by='Distance to chosen city (Km)', ascending=True).head(quantity_cities)
 
+    # download button for dataframe
+    def to_excel(df, city):
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        df.to_excel(writer, index=False, sheet_name=city)
+        workbook = writer.book
+        worksheet = writer.sheets[city]
+        format1 = workbook.add_format({'num_format': '0.00'})
+        worksheet.set_column('A:A', None, format1)
+        writer.close()
+        processed_data = output.getvalue()
+        return processed_data
+
+    df_xlsx = to_excel(result, city)
+
+    st.download_button(label='📥 Download Current Result',
+                       data=df_xlsx,
+                       file_name='cities_to_travel.xlsx')
+
+# dataframe/table
+with col2:
     st.dataframe(data=result[['State',
                               'City',
                               'Category',
@@ -743,36 +762,10 @@ with col2:
 # map
 with col3:
     st.map(data=result[['latitude', 'longitude']],
-           color='#374c80')
-
-# download button for dataframe
-
-
-def to_excel(df, city):
-    output = BytesIO()
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer, index=False, sheet_name=city)
-    workbook = writer.book
-    worksheet = writer.sheets[city]
-    format1 = workbook.add_format({'num_format': '0.00'})
-    worksheet.set_column('A:A', None, format1)
-    writer.close()
-    processed_data = output.getvalue()
-    return processed_data
-
-
-df_xlsx = to_excel(result, city)
-
-col1, space = st.columns([1, 5])
-with col1:
-    st.download_button(label='📥 Download Current Result',
-                       data=df_xlsx,
-                       file_name='cities_to_travel.xlsx')
+           color='#ef5675')
 
 
 # add download button for table (in xlsx)
 # adjust the stuff in the screen
 # add conclusion
 # fix FIXME
-# add requisits file
-# upload to streamlit cloud
