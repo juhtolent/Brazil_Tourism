@@ -42,7 +42,7 @@ df_2019 = import_category_2019()
 @st.cache_data
 def import_category_2016():
     df_2016 = pd.read_csv(
-        r"data\2016_MTur_Categorization.csv", delimiter=';')
+        "data/2016_MTur_Categorization.csv", delimiter=';')
 
     # renaming to english and to standardize
     df_2016.rename({
@@ -66,7 +66,7 @@ df_2016 = import_category_2016()
 @st.cache_data
 def import_category_2017():
     df_2017 = pd.read_csv(
-        r"data\2017_MTur_Categorization.csv", delimiter=';')
+        "data/2017_MTur_Categorization.csv", delimiter=';')
 
     # renaming to english and to standardize
     df_2017.rename({
@@ -565,7 +565,7 @@ st.markdown('''To get a more accurate distance calculation, we will use the have
 def import_latlong():
     # adding lat/long to the dataframe
     df_latlong = pd.read_csv(
-        r'data\BR_cities_latlong.csv', delimiter=',')
+        "data/BR_cities_latlong.csv", delimiter=',')
 
     # renaming to english and to standardize
     # renaming to english and to standardize
@@ -611,7 +611,7 @@ def haversine_distance(lat1, lon1, lat2, lon2):
 # adding airport information
 @st.cache_data
 def import_df_airport():
-    df_airport = pd.read_excel(r"data\aerodromospublicos-12.xls",
+    df_airport = pd.read_excel("data/aerodromospublicos-12.xls",
                                header=2,
                                # this database has several columns, so I'm choosing the columns
                                usecols=['CÓDIGO OACI',
