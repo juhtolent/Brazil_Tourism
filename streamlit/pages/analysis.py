@@ -3,8 +3,8 @@ import numpy as np
 import streamlit as st
 import plotly.express as px
 import re
-import io
-
+from io import BytesIO
+from pyxlsb import open_workbook as open_xlsb
 
 st.set_page_config(page_title="Portfolio",
                    layout="wide",
@@ -683,36 +683,36 @@ df_2019['Airport Nearby'] = airport_nearby
 col1, col2, col3 = st.columns([1, 3, 2])
 
 with col1:
-    with st.container(border=True):
-        airports = st.checkbox('Show only cities with airports near',
-                               help='It shows cities with airports within 100 km')
+    airports = st.checkbox('Show only cities with airports near',
+                           help='It shows cities with airports within 100 km')
 
-        if airports:
-            df_options = df_2019[df_2019['Airport Nearby'] ==
-                                 1]['City'].sort_values().unique()
-        else:
-            # selecting from all years of dataframe in order to get the complete list of cities
-            df_options = df['City'].sort_values().unique()
+    if airports:
+        df_options = df_2019[df_2019['Airport Nearby'] ==
+                             1]['City'].sort_values().unique()
+    else:
+        # selecting from all years of dataframe in order to get the complete list of cities
+        df_options = df['City'].sort_values().unique()
 
-        city = st.selectbox(
-            "Select/Write the city:",
-            options=df_options
-        )
+    city = st.selectbox(
+        "Select/Write the city:",
+        options=df_options
+    )
 
-        min_category_stability = st.slider(
-            "Select a minimum for the category stability variable:",
-            min_value=df_2019['Category Stability'].min().astype(int),
-            max_value=df_2019['Category Stability'].max().astype(int),
-            value=df_2019['Category Stability'].max().astype(int),
-            help='FIXME:add help')
+    min_category_stability = st.slider(
+        "Select a minimum for the category stability variable:",
+        min_value=df_2019['Category Stability'].min().astype(int),
+        max_value=df_2019['Category Stability'].max().astype(int),
+        value=df_2019['Category Stability'].max().astype(int),
+        help='FIXME:add help')
 
-        # quantity_cities = st.slider(
-        #     "Select how many cities you want:",
-        #     min_value=1,
-        #     max_value=len(),
-        #     value=df[df['Year'] == 2019]['Category Stability'].max().astype(int),
-        #     help='FIXME:add help')
+    quantity_cities = st.slider(
+        "Select how many cities you want:",
+        min_value=1,
+        max_value=25,
+        value=10,
+        help='FIXME:add help')
 
+# dataframe/table
 with col2:
     # defining the city chosen as a parameter of comparison
     # important to note that this is adaptable in the streamlit
@@ -724,11 +724,11 @@ with col2:
         distance_km.append(haversine_distance(
             home_lat, home_long, df_2019['latitude'].iloc[ind], df_2019['longitude'].iloc[ind]))
 
-    df_2019['Distance in km'] = distance_km
+    df_2019['Distance to chosen city (Km)'] = distance_km
 
     result = df_2019[(df_2019['Year'] == 2019) &
                      (df_2019['Category Stability'] >= min_category_stability)
-                     ].sort_values(by='Distance in km', ascending=True).head(10)
+                     ].sort_values(by='Distance to chosen city (Km)', ascending=True).head(quantity_cities)
 
     st.dataframe(data=result[['State',
                               'City',
@@ -739,11 +739,36 @@ with col2:
                  column_config={'Category': 'Category 2019'},
                  height=500,
                  hide_index=True,)
-    # FIXME: add download button
 
+# map
 with col3:
     st.map(data=result[['latitude', 'longitude']],
            color='#374c80')
+
+# download button for dataframe
+
+
+def to_excel(df, city):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name=city)
+    workbook = writer.book
+    worksheet = writer.sheets[city]
+    format1 = workbook.add_format({'num_format': '0.00'})
+    worksheet.set_column('A:A', None, format1)
+    writer.close()
+    processed_data = output.getvalue()
+    return processed_data
+
+
+df_xlsx = to_excel(result, city)
+
+col1, space = st.columns([1, 5])
+with col1:
+    st.download_button(label='📥 Download Current Result',
+                       data=df_xlsx,
+                       file_name='cities_to_travel.xlsx')
+
 
 # add download button for table (in xlsx)
 # adjust the stuff in the screen
