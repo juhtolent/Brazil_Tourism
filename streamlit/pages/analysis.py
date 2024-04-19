@@ -18,7 +18,7 @@ st.set_page_config(page_title="Portfolio",
 @st.cache_data
 def import_category_2019():
     df_2019 = pd.read_excel(
-        r"data\2019_MTur_Categorization.xlsx", header=3)
+        "data/2019_MTur_Categorization.xlsx", header=3)
 
     # renaming to english and to standardize
     df_2019.rename({
