@@ -703,14 +703,14 @@ with col1:
         min_value=df_2019['Category Stability'].min().astype(int),
         max_value=df_2019['Category Stability'].max().astype(int),
         value=df_2019['Category Stability'].max().astype(int),
-        help='FIXME:add help')
+        help='Based on the previous analysis, 12 is the best possible cities, however you may choose a lower minimum')
 
     quantity_cities = st.slider(
         "Select how many cities you want:",
         min_value=1,
         max_value=25,
         value=10,
-        help='FIXME:add help')
+        help='Choose how many cities you want to show on the table and map')
 
     # defining the city chosen as a parameter of comparison
     # important to note that this is adaptable in the streamlit
@@ -767,5 +767,4 @@ with col3:
 
 # add download button for table (in xlsx)
 # adjust the stuff in the screen
-# add conclusion
 # fix FIXME
