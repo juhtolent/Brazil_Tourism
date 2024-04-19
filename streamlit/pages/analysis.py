@@ -572,8 +572,8 @@ def import_latlong():
     df_latlong.rename({
         'codigo_ibge': 'City Code',
         'nome': 'City',
-        'latitude': 'Latitude',
-        'longitude': 'Longitude',
+        'latitude': 'latitude',
+        'longitude': 'longitude',
         'capital': 'Is Capital City',  # each state has a capital in Brazil,
         'codigo_uf': 'State Code',
         'siafi_id': 'Siafi ID',  # code for government administrative processes
@@ -588,7 +588,7 @@ df_latlong = import_latlong()
 # merging both dfs
 df = pd.merge(df,
               # selecting only lat/long information
-              df_latlong[['City Code', 'Latitude', 'Longitude']],
+              df_latlong[['City Code', 'latitude', 'longitude']],
               how='left',
               on='City Code')
 
@@ -627,8 +627,8 @@ def import_df_airport():
         'NOME': 'Airport Name',
                 'MUNICÍPIO ATENDIDO': 'City',
                 'UF': 'State',
-                'LATITUDE': 'Latitude (DD MM SS D)',
-                'LONGITUDE': 'Longitude (DD MM SS D)'}, axis='columns', inplace=True)
+                'LATITUDE': 'latitude (DD MM SS D)',
+                'LONGITUDE': 'longitude (DD MM SS D)'}, axis='columns', inplace=True)
 
     # airport information have lat/long in diferent format, this is changing it to decimal degrees
     def decimal_latlong(coordinate):
@@ -646,9 +646,9 @@ def import_df_airport():
                       float(seconds) / 3600.) * (1 if N_E else -1)
         return coordinate
 
-    df_airport['Latitude (decimal degrees)'] = df_airport['Latitude (DD MM SS D)'].apply(
+    df_airport['latitude (decimal degrees)'] = df_airport['latitude (DD MM SS D)'].apply(
         decimal_latlong)
-    df_airport['Longitude (decimal degrees)'] = df_airport['Longitude (DD MM SS D)'].apply(
+    df_airport['longitude (decimal degrees)'] = df_airport['longitude (DD MM SS D)'].apply(
         decimal_latlong)
 
     return df_airport
@@ -658,17 +658,17 @@ df_airport = import_df_airport()
 
 # seeing that from here on to the end of this script only the 2019 df will be used,
 # i will slice the df as to optimize the cloud usage
-df = df[df['Year'] == 2019]
+df_2019 = df[df['Year'] == 2019]
 
-# calculating distance  from other cities
+# calculating distance  from other cities
 airport_nearby = []
-for ind in df.index:
-    lat_city = df['Latitude'].iloc[ind]
-    long_city = df['Longitude'].iloc[ind]
+for ind in df_2019.index:
+    lat_city = df_2019['latitude'].iloc[ind]
+    long_city = df_2019['longitude'].iloc[ind]
     list = []
     for ind_airport in df_airport.index:
-        lat_airport = df_airport['Latitude (decimal degrees)'].iloc[ind_airport]
-        long_airport = df_airport['Longitude (decimal degrees)'].iloc[ind_airport]
+        lat_airport = df_airport['latitude (decimal degrees)'].iloc[ind_airport]
+        long_airport = df_airport['longitude (decimal degrees)'].iloc[ind_airport]
         list.append(haversine_distance(
             lat_city, long_city, lat_airport, long_airport))
 
@@ -677,48 +677,75 @@ for ind in df.index:
 
     airport_nearby.append(1 if min(list) < 100 else 0)
 
-df['Airport nearby'] = airport_nearby
+df_2019['Airport Nearby'] = airport_nearby
 
 # filters
-col1, space = st.columns([1, 5])
+col1, col2, col3 = st.columns([1, 3, 2])
 
 with col1:
+    with st.container(border=True):
+        airports = st.checkbox('Show only cities with airports near',
+                               help='It shows cities with airports within 100 km')
 
-    city = st.selectbox(
-        "Select/Write the city:",
-        options=df['City'].sort_values().unique()
-    )
+        if airports:
+            df_options = df_2019[df_2019['Airport Nearby'] ==
+                                 1]['City'].sort_values().unique()
+        else:
+            # selecting from all years of dataframe in order to get the complete list of cities
+            df_options = df['City'].sort_values().unique()
 
-    min_category_stability = st.slider(
-        "Select a minimum for the category stability variable:",
-        min_value=df['Category Stability'].min().astype(int),
-        max_value=df['Category Stability'].max().astype(int),
-        value=df['Category Stability'].max().astype(int),
-        help='FIXME:add help')
+        city = st.selectbox(
+            "Select/Write the city:",
+            options=df_options
+        )
 
-    # quantity_cities = st.slider(
-    #     "Select how many cities you want:",
-    #     min_value=1,
-    #     max_value=len(),
-    #     value=df[df['Year'] == 2019]['Category Stability'].max().astype(int),
-    #     help='FIXME:add help')
+        min_category_stability = st.slider(
+            "Select a minimum for the category stability variable:",
+            min_value=df_2019['Category Stability'].min().astype(int),
+            max_value=df_2019['Category Stability'].max().astype(int),
+            value=df_2019['Category Stability'].max().astype(int),
+            help='FIXME:add help')
 
-# defining the city chosen as a parameter of comparison
-# important to note that this is adaptable in the streamlit
-home_lat = df[(df['City'] == city)]['Latitude'].iloc[0]
-home_long = df[(df['City'] == city)]['Longitude'].iloc[0]
+        # quantity_cities = st.slider(
+        #     "Select how many cities you want:",
+        #     min_value=1,
+        #     max_value=len(),
+        #     value=df[df['Year'] == 2019]['Category Stability'].max().astype(int),
+        #     help='FIXME:add help')
 
-distance_km = []
-for ind in df.index:
-    distance_km.append(haversine_distance(
-        home_lat, home_long, df['Latitude'].iloc[ind], df['Longitude'].iloc[ind]))
+with col2:
+    # defining the city chosen as a parameter of comparison
+    # important to note that this is adaptable in the streamlit
+    home_lat = df[(df['City'] == city)]['latitude'].iloc[0]
+    home_long = df[(df['City'] == city)]['longitude'].iloc[0]
 
-df['Distance in km'] = distance_km
+    distance_km = []
+    for ind in df_2019.index:
+        distance_km.append(haversine_distance(
+            home_lat, home_long, df_2019['latitude'].iloc[ind], df_2019['longitude'].iloc[ind]))
 
-result = df[(df['Year'] == 2019) &
-            (df['Category Stability'] >= min_category_stability)
-            ].sort_values(by='Distance in km', ascending=True).head(10)
+    df_2019['Distance in km'] = distance_km
 
-st.dataframe(result)
-# here: add latlong csv to the df > adjust filters [add button] and calculate distance >
-# add download button for table (in xlsx) > insert a map o/
+    result = df_2019[(df_2019['Year'] == 2019) &
+                     (df_2019['Category Stability'] >= min_category_stability)
+                     ].sort_values(by='Distance in km', ascending=True).head(10)
+
+    st.dataframe(data=result[['State',
+                              'City',
+                              'Category',
+                              'Category Stability',
+                              'Tourist Region',
+                              'Airport Nearby']],
+                 height=500,
+                 hide_index=True)
+    # FIXME: add download button
+
+with col3:
+    st.map(data=result[['latitude', 'longitude']],
+           color='#374c80')
+
+# add download button for table (in xlsx)
+# adjust the stuff in the screen
+# add conclusion
+# fix FIXME
+# upload to streamlit cloud
