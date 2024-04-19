@@ -442,18 +442,18 @@ with col1:
 
 with col2:
     st.markdown('''
-                The total number of destinations in <b>category A</b> remains relatively stable over time. 
+                The total number of destinations in <b>category A</b> remains relatively stable over time.
                 <br>
-                However, there are significant changes in <b>categories B and C</b>. This is likely due to a shift 
-                in categorization methodology, possibly coinciding with the inclusion of all 5,570 Brazilian cities 
-                in 2016. 
+                However, there are significant changes in <b>categories B and C</b>. This is likely due to a shift
+                in categorization methodology, possibly coinciding with the inclusion of all 5,570 Brazilian cities
+                in 2016.
                 <br>
-                This explains the higher number of destinations in <b>categories D and E</b> in that year 
-                compared to subsequent years. The reason for the variation in total city count between 2017 and 
+                This explains the higher number of destinations in <b>categories D and E</b> in that year
+                compared to subsequent years. The reason for the variation in total city count between 2017 and
                 2019 remains unclear and could not be found.
                 <br>
                 <br>
-                Therefore, a good parameter to assess a city's appeal for visitors should be the stability of 
+                Therefore, a good parameter to assess a city's appeal for visitors should be the stability of
                 its categorization over time.
                 ''', unsafe_allow_html=True)
 
@@ -461,20 +461,20 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown('''
-                <b> Categorization stability </b> : This refers to how consistently a city falls within 
-                certain categories across the years. 
+                <b> Categorization stability </b> : This refers to how consistently a city falls within
+                certain categories across the years.
                 <br>
-                To measure this stability, I propose a method that assigns numerical values to each category. By 
-                summing these values across different points in time, we can identify cities with more 
+                To measure this stability, I propose a method that assigns numerical values to each category. By
+                summing these values across different points in time, we can identify cities with more
                 consistent categorizations.
                 <br>
                 <br>
                 |Category | A | B | C | D | E |
                 |---------------|---|---|---|---|---|
-                |Value| 4 | 3 | 2 | 1 | 0 | 
+                |Value| 4 | 3 | 2 | 1 | 0 |
                 <br>
-                It is important to note that, as 2019 represents the most recent classification data available, 
-                our primary focus should be on cities analyzed in that year to ensure the most up-to-date information 
+                It is important to note that, as 2019 represents the most recent classification data available,
+                our primary focus should be on cities analyzed in that year to ensure the most up-to-date information
                 guides decision-making.
                 ''', unsafe_allow_html=True)
 
@@ -533,16 +533,16 @@ with col2:
     st.plotly_chart(fig, use_container_width=True)
 
 st.markdown('''
-        Seeing the heatmap, there is a clear distinction between category A and categories B and C 
+        Seeing the heatmap, there is a clear distinction between category A and categories B and C
         regarding classification stability over time.
         <br>
-        - <b> Category A </b>: A significant majority (77%, or 44 out of 57 cities) within category A maintained 
-        their classification. This suggests a high level of stability in infrastructure for these top-ranked 
-        destinations.  
-        - <b> Categories B & C </b>: A lower proportion of cities in categories B (49%, or 110 out of 221) and 
-        C (54%, or 230 out of 419) retained their classifications. This indicates greater fluctuation in 
-        infrastructure development within these categories. Therefore, while interesting destinations exist 
-        across categories A, B, and C, prioritizing cities in category A is recommended due to their 
+        - <b> Category A </b>: A significant majority (77%, or 44 out of 57 cities) within category A maintained
+        their classification. This suggests a high level of stability in infrastructure for these top-ranked
+        destinations.
+        - <b> Categories B & C </b>: A lower proportion of cities in categories B (49%, or 110 out of 221) and
+        C (54%, or 230 out of 419) retained their classifications. This indicates greater fluctuation in
+        infrastructure development within these categories. Therefore, while interesting destinations exist
+        across categories A, B, and C, prioritizing cities in category A is recommended due to their
         consistent infrastructure quality.
         ''', unsafe_allow_html=True)
 
@@ -736,8 +736,9 @@ with col2:
                               'Category Stability',
                               'Tourist Region',
                               'Airport Nearby']],
+                 column_config={'Category': 'Category 2019'},
                  height=500,
-                 hide_index=True)
+                 hide_index=True,)
     # FIXME: add download button
 
 with col3:
