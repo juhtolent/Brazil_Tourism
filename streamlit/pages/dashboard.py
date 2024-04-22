@@ -160,7 +160,7 @@ with st.sidebar:
         help="The Brazilian government has grouped the country's states into five large geographic and statistical units called the Major Regions (Grandes Regiões): North (Norte), Northeast (Nordeste), Central-West (Centro-Oeste), Southeast (Sudeste), and South (Sul)."
     )
 
-    df = df.query("MacroRegion == @macro_region")
+    # df = df.query("MacroRegion == @macro_region")
 
     state = st.selectbox(
         'Select a State:',
@@ -169,6 +169,6 @@ with st.sidebar:
         placeholder='All States selected'
     )
 
-    df = df.query("State == @state")
+    # df = df.query("State == @state")
 
 st.dataframe(df)
