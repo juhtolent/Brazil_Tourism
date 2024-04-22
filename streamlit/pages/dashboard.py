@@ -155,12 +155,12 @@ with st.sidebar:
     macro_region = st.selectbox(
         'Select a MacroRegion:',
         options=df[df['Year'] == 2019]['MacroRegion'].sort_values().unique(),
-        index=None,
+        default=df[df['Year'] == 2019]['MacroRegion'].sort_values().unique(),
         placeholder='All MacroRegions selected',
         help="The Brazilian government has grouped the country's states into five large geographic and statistical units called the Major Regions (Grandes Regiões): North (Norte), Northeast (Nordeste), Central-West (Centro-Oeste), Southeast (Sudeste), and South (Sul)."
     )
 
-    # df = df.query("MacroRegion == @macro_region")
+    df = df.query("MacroRegion == @macro_region")
 
     state = st.selectbox(
         'Select a State:',
