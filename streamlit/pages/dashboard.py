@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import plotly.express as px
+import locale
+
 
 st.set_page_config(page_title='Dashboard',
                    layout='wide',
@@ -11,11 +13,13 @@ st.set_page_config(page_title='Dashboard',
 
 # ----- dataframes and cache
 
+# filepath = 'data/2019_MTur_Categorization.xlsx'
+filepath = r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\2019_MTur_Categorization.xlsx"
+
 
 @st.cache_data
 def import_category_2019():
-    df_2019 = pd.read_excel(
-        'data/2019_MTur_Categorization.xlsx', header=3)
+    df_2019 = pd.read_excel(filepath, header=3)
 
     # renaming to english and to standardize
     df_2019.rename({
@@ -35,11 +39,14 @@ def import_category_2019():
 
 df_2019 = import_category_2019()
 
+# filepath = 'data/2016_MTur_Categorization.csv'
+filepath = r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\2016_MTur_Categorization.csv"
+
 
 @st.cache_data
 def import_category_2016():
     df_2016 = pd.read_csv(
-        'data/2016_MTur_Categorization.csv', delimiter=';')
+        filepath, delimiter=';')
 
     # renaming to english and to standardize
     df_2016.rename({
@@ -59,11 +66,14 @@ def import_category_2016():
 
 df_2016 = import_category_2016()
 
+# filepath = 'data/2017_MTur_Categorization.csv'
+filepath = r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\2017_MTur_Categorization.csv"
+
 
 @st.cache_data
 def import_category_2017():
     df_2017 = pd.read_csv(
-        'data/2017_MTur_Categorization.csv', delimiter=';')
+        filepath, delimiter=';')
 
     # renaming to english and to standardize
     df_2017.rename({
@@ -99,12 +109,15 @@ df_2017['Year'] = 2017
 
 df = pd.concat([df_2019, df_2016, df_2017])
 
+# filepath = 'data/BR_cities_latlong.csv'
+filepath = r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\BR_cities_latlong.csv"
+
 
 @st.cache_data
 def import_latlong():
     # adding lat/long to the dataframe
     df_latlong = pd.read_csv(
-        'data/BR_cities_latlong.csv', delimiter=',')
+        filepath, delimiter=',')
 
     # renaming to english and to standardize
     # renaming to english and to standardize
@@ -152,6 +165,9 @@ df['MacroRegion'] = df['State'].apply(set_macro_region)
 
 # ----- filters
 with st.sidebar:
+
+    st.title('Filters')
+
     macro_region = st.multiselect(
         'Select a MacroRegion:',
         options=df[df['Year'] == 2019]['MacroRegion'].sort_values().unique(),
@@ -171,4 +187,51 @@ with st.sidebar:
 
     df = df.query("State == @state")
 
-st.dataframe(df)
+# ----- metrics/ big numbers
+
+col1, col2, col3, col4 = st.columns([1, 2, 1, 1])
+
+# localize number format
+locale.setlocale(locale.LC_NUMERIC, "en_US.UTF-8")
+
+with col1:
+    st.metric(label='Quantity of cities',
+              value=len(df[df['Year'] == 2019]['City'].unique()))
+with col2:
+    metric_tax_revenue = locale.format_string('%.0f',
+                                              val=df[df['Year'] ==
+                                                     2019]['Tax Revenue'].sum(),
+                                              grouping=True,
+                                              monetary=False)
+
+    st.metric(label='Tax Revenue in 2019',
+              value=f'R$ {metric_tax_revenue}')
+
+with col3:
+    st.metric(label='Establishments',
+              value=df[df['Year'] == 2019]['Establishments'].sum())
+
+with col4:
+    st.metric(label='Jobs',
+              value=df[df['Year'] == 2019]['Jobs'].sum())
+
+# ----- top cities in according to tax revenue
+with st.popover("Change ranking column"):
+    variable = st.selectbox("What's your name?",
+                            options=['Tax Revenue',
+                                     'Domestic Tourists',
+                                     'International Tourists',
+                                     'Jobs',
+                                     'Establishments'])
+
+df_cities_tax = df[df['Year'] == 2019][[
+    'City', variable]].sort_values(by=variable, ascending=False)
+
+st.dataframe(df_cities_tax,
+             column_config={
+                 variable: st.column_config.ProgressColumn(
+                     variable,
+                     format="%f",
+                     min_value=0,
+                     max_value=max(df_cities_tax[variable]))},
+             hide_index=True)
