@@ -6,10 +6,10 @@ import re
 from io import BytesIO
 from pyxlsb import open_workbook as open_xlsb
 
-st.set_page_config(page_title="Portfolio",
-                   layout="wide",
-                   page_icon="📊",
-                   initial_sidebar_state="collapsed"
+st.set_page_config(page_title='Portfolio',
+                   layout='wide',
+                   page_icon='🛫',
+                   initial_sidebar_state='collapsed'
                    )
 
 
@@ -18,7 +18,7 @@ st.set_page_config(page_title="Portfolio",
 @st.cache_data
 def import_category_2019():
     df_2019 = pd.read_excel(
-        "data/2019_MTur_Categorization.xlsx", header=3)
+        'data/2019_MTur_Categorization.xlsx', header=3)
 
     # renaming to english and to standardize
     df_2019.rename({
@@ -42,7 +42,7 @@ df_2019 = import_category_2019()
 @st.cache_data
 def import_category_2016():
     df_2016 = pd.read_csv(
-        "data/2016_MTur_Categorization.csv", delimiter=';')
+        'data/2016_MTur_Categorization.csv', delimiter=';')
 
     # renaming to english and to standardize
     df_2016.rename({
@@ -66,7 +66,7 @@ df_2016 = import_category_2016()
 @st.cache_data
 def import_category_2017():
     df_2017 = pd.read_csv(
-        "data/2017_MTur_Categorization.csv", delimiter=';')
+        'data/2017_MTur_Categorization.csv', delimiter=';')
 
     # renaming to english and to standardize
     df_2017.rename({
@@ -82,7 +82,7 @@ def import_category_2017():
         'Código Município': 'City Code'}, axis='columns', inplace=True)
 
     df_2017['International Tourists'] = df_2017['International Tourists'].replace(
-        '.', '', regex=True)  # there are numbers with a "."
+        '.', '', regex=True)  # there are numbers with a '.'
     df_2017['International Tourists'] = pd.to_numeric(
         df_2017['International Tourists'])
 
@@ -103,8 +103,8 @@ df_2017['Year'] = 2017
 df = pd.concat([df_2019, df_2016, df_2017])
 
 # ---- general settings for charts
-template_dash = "plotly_white"
-bg_color_dash = "rgba(0,0,0,0)"
+template_dash = 'plotly_white'
+bg_color_dash = 'rgba(0,0,0,0)'
 colors = ['#003f5c', '#374c80', '#7a5195',
           '#bc5090', '#ef5675', '#ed9231', '#f2ff49']
 
@@ -112,11 +112,11 @@ colors = ['#003f5c', '#374c80', '#7a5195',
 ########## Analysis Main Panel ########
 
 # Title
-st.markdown('''<h2 style = "text-align: center;"><span style="word-wrap:break-word;">
+st.markdown('''<h2 style = 'text-align: center;'><span style='word-wrap:break-word;'>
                     🛫Where should we travel to?
                 </span> </h2>''', unsafe_allow_html=True)
 st.caption(f'''This portfolio project showcases my expertise in data analysis through answering the question:
-           "Which Brazilian cities should we travel to?". This is done by an examination of Brazilian
+           'Which Brazilian cities should we travel to?'. This is done by an examination of Brazilian
            cities identified by the Brazilian Ministry of Tourism as key destinations
            in their public policy plan (Mapa do Turismo/Tourism Map).
            This analysis is also explored in a [jupyter notebook](https://github.com/juhtolent/Brazil_Tourism/blob/main/Data%20Analysis%20-%20Tourism.ipynb)
@@ -124,7 +124,7 @@ st.caption(f'''This portfolio project showcases my expertise in data analysis th
 
 
 # Quick Explanation
-with st.expander("Quick explanation about the Tourism Map"):
+with st.expander('Quick explanation about the Tourism Map'):
     st.markdown('''<h5 style> Tourism Map </h5>''', unsafe_allow_html=True)
     st.markdown('''The Brazilian Tourism Map is an instrument within the Tourism Regionalization
                 Program that defines the area - territorial cut - to be worked on as a priority
@@ -175,19 +175,19 @@ with col1:
         col11, col12, col13 = st.columns(3)
         with col11:
             value = len(df[df['Year'] == 2016])
-            st.metric(label="2016", value=value)
+            st.metric(label='2016', value=value)
 
         with col12:
             value = len(df[df['Year'] == 2017])
             delta = round((len(df[df['Year'] == 2017]) -
                            len(df[df['Year'] == 2016]))/len(df[df['Year'] == 2016])*100)
-            st.metric(label="2017", value=value, delta=str(delta)+"%")
+            st.metric(label='2017', value=value, delta=str(delta)+'%')
 
         with col13:
             value = len(df[df['Year'] == 2019])
             delta = round((len(df[df['Year'] == 2019]) -
                            len(df[df['Year'] == 2017]))/len(df[df['Year'] == 2017])*100)
-            st.metric(label="2019", value=value, delta=str(delta)+"%")
+            st.metric(label='2019', value=value, delta=str(delta)+'%')
 
         st.markdown('''Yearly data has varying city counts - In 2016, every Brazilian city was included (5570),
                     however there was a decline in subsequent years.
@@ -274,10 +274,10 @@ df_chart = df[df['Year'] == option].sort_values('Category')
 def boxplot(variable):
     fig = px.box(
         df_chart,
-        x="Category",
+        x='Category',
         y=variable,
         template=template_dash,
-        color="Category",
+        color='Category',
         width=500,
         height=350,
         color_discrete_sequence=colors
@@ -285,7 +285,7 @@ def boxplot(variable):
     fig.update_layout(
         plot_bgcolor=bg_color_dash,
         title={
-            'text': f"<b> {variable} </b>",
+            'text': f'<b> {variable} </b>',
             'y': 0.9,
             'x': 0.5,
             'xanchor': 'center',
@@ -299,12 +299,12 @@ def boxplot(variable):
 
 col1, col2 = st.columns(2)
 with col1:
-    st.plotly_chart(boxplot("Jobs"))
-    st.plotly_chart(boxplot("Domestic Tourists"))
+    st.plotly_chart(boxplot('Jobs'))
+    st.plotly_chart(boxplot('Domestic Tourists'))
 
 with col2:
-    st.plotly_chart(boxplot("Establishments"))
-    st.plotly_chart(boxplot("International Tourists"))
+    st.plotly_chart(boxplot('Establishments'))
+    st.plotly_chart(boxplot('International Tourists'))
 
 # ANALYSIS
 st.markdown('''
@@ -329,7 +329,7 @@ st.markdown('''
             <br>
             ''', unsafe_allow_html=True)
 
-with st.expander("Further analysis on categories D & E"):
+with st.expander('Further analysis on categories D & E'):
     df_de = df.loc[(df['Category'] == 'D') | (df['Category'] == 'E')]
     st.markdown('''The conclusions written above can be seen on the charts below.
                 ''', unsafe_allow_html=True)
@@ -354,8 +354,8 @@ with st.expander("Further analysis on categories D & E"):
             df_chart,
             y=variable,
             template=template_dash,
-            marginal="rug",
-            color="Category",
+            marginal='rug',
+            color='Category',
             width=500,
             height=350,
             color_discrete_map={'D': '#bc5090', 'E': '#EA1F48'},
@@ -365,7 +365,7 @@ with st.expander("Further analysis on categories D & E"):
         fig.update_layout(
             plot_bgcolor=bg_color_dash,
             title={
-                'text': f"<b> {variable} </b>",
+                'text': f'<b> {variable} </b>',
                 'y': 0.9,
                 'x': 0.5,
                 'xanchor': 'center',
@@ -376,12 +376,12 @@ with st.expander("Further analysis on categories D & E"):
 
     col1, col2 = st.columns(2)
     with col1:
-        st.plotly_chart(histplot("Jobs"))
-        st.plotly_chart(histplot("Domestic Tourists"))
+        st.plotly_chart(histplot('Jobs'))
+        st.plotly_chart(histplot('Domestic Tourists'))
 
     with col2:
-        st.plotly_chart(histplot("Establishments"))
-        st.plotly_chart(histplot("International Tourists"))
+        st.plotly_chart(histplot('Establishments'))
+        st.plotly_chart(histplot('International Tourists'))
 
 st.markdown('''<h5 style> 2.1. Time analysis </h5>''',
             unsafe_allow_html=True)
@@ -423,7 +423,7 @@ with col1:
     fig.update_layout(
         plot_bgcolor=bg_color_dash,
         title={
-            'text': "<b> % Category distribution accross the years </b>",
+            'text': '<b> % Category distribution accross the years </b>',
             'y': 0.95,
             'x': 0.5,
             'xanchor': 'center',
@@ -521,7 +521,7 @@ with col2:
                       yaxis=dict(type='category'),
                       autosize=False,
                       title={
-        'text': "<b> % Category distribution accross the years </b>",
+        'text': '<b> % Category distribution accross the years </b>',
         'y': 0.95,
         'x': 0.45,
         'xanchor': 'center',
@@ -571,7 +571,7 @@ st.markdown('''
 def import_latlong():
     # adding lat/long to the dataframe
     df_latlong = pd.read_csv(
-        "data/BR_cities_latlong.csv", delimiter=',')
+        'data/BR_cities_latlong.csv', delimiter=',')
 
     # renaming to english and to standardize
     # renaming to english and to standardize
@@ -617,7 +617,7 @@ def haversine_distance(lat1, lon1, lat2, lon2):
 # adding airport information
 @st.cache_data
 def import_df_airport():
-    df_airport = pd.read_excel("data/aerodromospublicos-12.xls",
+    df_airport = pd.read_excel('data/aerodromospublicos-12.xls',
                                header=2,
                                # this database has several columns, so I'm choosing the columns
                                usecols=['CÓDIGO OACI',
@@ -639,15 +639,15 @@ def import_df_airport():
     # airport information have lat/long in diferent format, this is changing it to decimal degrees
     def decimal_latlong(coordinate):
         # clean all white spaces
-        coordinate = coordinate.replace(" ", '')
+        coordinate = coordinate.replace(' ', '')
 
         # direction is the last letter, which indicates north, south, east and west
-        # in lat/long decimal degrees, these letters are represented by the "+" or "-" symbol
+        # in lat/long decimal degrees, these letters are represented by the '+' or '-' symbol
         direction = coordinate[-1:]
         N_E = direction in ('N', 'E')
 
         # splitting the cell in multiple variables
-        degrees, minutes, seconds, junk = re.split('[°\'"]+', coordinate[0:-1])
+        degrees, minutes, seconds, junk = re.split("[°\'']+", coordinate[0:-1])
         coordinate = (float(degrees) + float(minutes) / 60. +
                       float(seconds) / 3600.) * (1 if N_E else -1)
         return coordinate
@@ -700,19 +700,19 @@ with col1:
         df_options = df['City'].sort_values().unique()
 
     city = st.selectbox(
-        "Select/Write the city:",
+        'Select/Write the city:',
         options=df_options
     )
 
     min_category_stability = st.slider(
-        "Select a minimum for the category stability variable:",
+        'Select a minimum for the category stability variable:',
         min_value=df_2019['Category Stability'].min().astype(int),
         max_value=df_2019['Category Stability'].max().astype(int),
         value=df_2019['Category Stability'].max().astype(int),
         help='Based on the previous analysis, 12 is the best possible cities, however you may choose a lower minimum')
 
     quantity_cities = st.slider(
-        "Select how many cities you want:",
+        'Select how many cities you want:',
         min_value=1,
         max_value=25,
         value=10,
