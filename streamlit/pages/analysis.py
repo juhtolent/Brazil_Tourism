@@ -6,7 +6,7 @@ import re
 from io import BytesIO
 from pyxlsb import open_workbook as open_xlsb
 
-st.set_page_config(page_title='Portfolio',
+st.set_page_config(page_title='Analysis',
                    layout='wide',
                    page_icon='🛫',
                    initial_sidebar_state='collapsed'
@@ -594,7 +594,7 @@ df_latlong = import_latlong()
 # merging both dfs
 df = pd.merge(df,
               # selecting only lat/long information
-              df_latlong[['City Code', 'latitude', 'longitude']],
+              df_latlong[['City Code', 'latitude', 'longitude']],#lat/long must have specific names for st.map
               how='left',
               on='City Code')
 
