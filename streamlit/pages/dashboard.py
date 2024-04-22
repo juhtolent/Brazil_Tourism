@@ -154,7 +154,7 @@ df['Macro-Region'] = df['State'].apply(set_macro_region)
 with st.sidebar:
     macro_region = st.selectbox(
         'Select a Macro-Region:',
-        options=df[df['Year'] == 2019].sort_values().unique(),
+        options=df[df['Year'] == 2019]['Macro-Region'].sort_values().unique(),
         index=None,
         placeholder='All Macro-regions selected',
         help="The Brazilian government has grouped the country's states into five large geographic and statistical units called the Major Regions (Grandes Regiões): North (Norte), Northeast (Nordeste), Central-West (Centro-Oeste), Southeast (Sudeste), and South (Sul)."
@@ -164,7 +164,7 @@ with st.sidebar:
 
     state = st.selectbox(
         'Select a State:',
-        options=df[df['Year'] == 2019].sort_values().unique(),
+        options=df[df['Year'] == 2019]['State'].sort_values().unique(),
         index=None,
         placeholder='All States selected'
     )
