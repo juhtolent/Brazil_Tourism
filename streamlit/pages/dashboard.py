@@ -131,4 +131,23 @@ df = pd.merge(df,
               how='left',
               on='City Code')
 
+# 2019 data doesn't have the column "macro-region", will add below
+
+
+def macro_region(state):
+    if state in ['AL', 'BA', 'MA', 'CE', 'PB', 'PE', 'PI', 'RN', 'SE']:
+        return 'Nordeste'
+    elif state in ['MG', 'SP', 'RJ', 'ES']:
+        return 'Sudeste'
+    elif state in ['RS', 'SC', 'PR']:
+        return 'Sul'
+    elif state in ['AC', 'AM', 'AP', 'PA', 'RO', 'RR', 'TO']:
+        return 'Norte'
+    elif state in ['GO', 'MT', 'DF']:
+        return 'Centro-Oeste'
+
+
+# assigning each row a number according to the category
+df['Macro-Region'] = df['State'].apply(macro_region)
+
 st.dataframe(df)
