@@ -152,7 +152,7 @@ df['MacroRegion'] = df['State'].apply(set_macro_region)
 
 # ----- filters
 with st.sidebar:
-    macro_region = st.selectbox(
+    macro_region = st.multiselect(
         'Select a MacroRegion:',
         options=df[df['Year'] == 2019]['MacroRegion'].sort_values().unique(),
         default=df[df['Year'] == 2019]['MacroRegion'].sort_values().unique(),
@@ -162,13 +162,13 @@ with st.sidebar:
 
     df = df.query("MacroRegion == @macro_region")
 
-    state = st.selectbox(
+    state = st.multiselect(
         'Select a State:',
         options=df[df['Year'] == 2019]['State'].sort_values().unique(),
-        index=None,
+        default=df[df['Year'] == 2019]['State'].sort_values().unique(),
         placeholder='All States selected'
     )
 
-    # df = df.query("State == @state")
+    df = df.query("State == @state")
 
 st.dataframe(df)
