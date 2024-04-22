@@ -47,7 +47,7 @@ def import_category_2016():
     # renaming to english and to standardize
     df_2016.rename({
         # the five official regions of Brazil based on shared characteristics, like climate or vegetation.
-        'MACRO': 'Macro-Region',
+        'MACRO': 'MacroRegion',
         'UF': 'State',
         'MUNICIPIO': 'City',
         'REGIAO_TURISTICA': 'Tourist Region',
@@ -70,7 +70,7 @@ def import_category_2017():
 
     # renaming to english and to standardize
     df_2017.rename({
-        'Macro Região': 'Macro-Region',
+        'Macro Região': 'MacroRegion',
         'UF': 'State',
         'Município': 'City',
         'Região': 'Tourist Region',
@@ -243,7 +243,7 @@ with col2:
             ['Category', 'A classification assigned to the city based on specific economic performance of tourism in the municipalities.'],
             ['City Code', 'The official unique identifier for the city.'],
             ['Year', 'The year the data pertains to.'],
-            ['Macro-Region', 'One of the five official regions of Brazil based on shared characteristics, like climate or vegetation.'],
+            ['MacroRegion', 'One of the five official regions of Brazil based on shared characteristics, like climate or vegetation.'],
         ]
 
         columns_explained = pd.DataFrame(

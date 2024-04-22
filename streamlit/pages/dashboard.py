@@ -44,7 +44,7 @@ def import_category_2016():
     # renaming to english and to standardize
     df_2016.rename({
         # the five official regions of Brazil based on shared characteristics, like climate or vegetation.
-        'MACRO': 'Macro-Region',
+        'MACRO': 'MacroRegion',
         'UF': 'State',
         'MUNICIPIO': 'City',
         'REGIAO_TURISTICA': 'Tourist Region',
@@ -67,7 +67,7 @@ def import_category_2017():
 
     # renaming to english and to standardize
     df_2017.rename({
-        'Macro Região': 'Macro-Region',
+        'Macro Região': 'MacroRegion',
         'UF': 'State',
         'Município': 'City',
         'Região': 'Tourist Region',
@@ -131,7 +131,7 @@ df = pd.merge(df,
               how='left',
               on='City Code')
 
-# 2019 data doesn't have the column "macro-region", will add below
+# 2019 data doesn't have the column "MacroRegion", will add below
 
 
 def set_macro_region(state):
@@ -147,20 +147,20 @@ def set_macro_region(state):
         return 'Centro-Oeste'
 
 
-# assigning each row a macro-region
-df['Macro-Region'] = df['State'].apply(set_macro_region)
+# assigning each row a MacroRegion
+df['MacroRegion'] = df['State'].apply(set_macro_region)
 
 # ----- filters
 with st.sidebar:
     macro_region = st.selectbox(
-        'Select a Macro-Region:',
-        options=df[df['Year'] == 2019]['Macro-Region'].sort_values().unique(),
+        'Select a MacroRegion:',
+        options=df[df['Year'] == 2019]['MacroRegion'].sort_values().unique(),
         index=None,
-        placeholder='All Macro-regions selected',
+        placeholder='All MacroRegions selected',
         help="The Brazilian government has grouped the country's states into five large geographic and statistical units called the Major Regions (Grandes Regiões): North (Norte), Northeast (Nordeste), Central-West (Centro-Oeste), Southeast (Sudeste), and South (Sul)."
     )
 
-    df = df.query("Macro-Region == @macro_region")
+    df = df.query("MacroRegion == @macro_region")
 
     state = st.selectbox(
         'Select a State:',
