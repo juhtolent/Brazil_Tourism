@@ -209,11 +209,11 @@ with col2:
 
 with col3:
     st.metric(label='Establishments',
-              value=df[df['Year'] == 2019]['Establishments'].sum())
+              value=df[df['Year'] == 2019]['Establishments'].sum().astype(int))
 
 with col4:
     st.metric(label='Jobs',
-              value=df[df['Year'] == 2019]['Jobs'].sum())
+              value=df[df['Year'] == 2019]['Jobs'].sum().astype(int))
 
 # ----- top cities in according to tax revenue
 with st.popover("Change ranking column"):
