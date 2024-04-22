@@ -15,7 +15,7 @@ st.set_page_config(page_title='Dashboard',
 @st.cache_data
 def import_category_2019():
     df_2019 = pd.read_excel(
-        'data/2019_MTur_Categorization.xlsx', header=3)
+        filepath, header=3)
 
     # renaming to english and to standardize
     df_2019.rename({
@@ -134,7 +134,7 @@ df = pd.merge(df,
 # 2019 data doesn't have the column "macro-region", will add below
 
 
-def macro_region(state):
+def set_macro_region(state):
     if state in ['AL', 'BA', 'MA', 'CE', 'PB', 'PE', 'PI', 'RN', 'SE']:
         return 'Nordeste'
     elif state in ['MG', 'SP', 'RJ', 'ES']:
@@ -143,11 +143,32 @@ def macro_region(state):
         return 'Sul'
     elif state in ['AC', 'AM', 'AP', 'PA', 'RO', 'RR', 'TO']:
         return 'Norte'
-    elif state in ['GO', 'MT', 'DF']:
+    elif state in ['GO', 'MT', 'DF', 'MS']:
         return 'Centro-Oeste'
 
 
-# assigning each row a number according to the category
-df['Macro-Region'] = df['State'].apply(macro_region)
+# assigning each row a macro-region
+df['Macro-Region'] = df['State'].apply(set_macro_region)
+
+# ----- filters
+with st.sidebar:
+    macro_region = st.selectbox(
+        'Select a Macro-Region:',
+        options=df[df['Year'] == 2019].sort_values().unique(),
+        index=None,
+        placeholder='All Macro-regions selected',
+        help="The Brazilian government has grouped the country's states into five large geographic and statistical units called the Major Regions (Grandes Regiões): North (Norte), Northeast (Nordeste), Central-West (Centro-Oeste), Southeast (Sudeste), and South (Sul)."
+    )
+
+    df = df.query("Macro-Region == @macro_region")
+
+    state = st.selectbox(
+        'Select a State:',
+        options=df[df['Year'] == 2019].sort_values().unique(),
+        index=None,
+        placeholder='All States selected'
+    )
+
+    df = df.query("State == @state")
 
 st.dataframe(df)

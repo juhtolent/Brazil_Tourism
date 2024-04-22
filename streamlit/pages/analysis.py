@@ -700,7 +700,7 @@ with col1:
         df_options = df['City'].sort_values().unique()
 
     city = st.selectbox(
-        'Select/Write the city:',
+        'Select/Write a city:',
         options=df_options
     )
 
