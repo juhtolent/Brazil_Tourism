@@ -7,3 +7,4 @@ st_pages
 openpyxl
 xlrd
 xlsxwriter
+locale
