@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import plotly.express as px
+import json
 import locale
 
 
@@ -144,7 +145,7 @@ df = pd.merge(df,
               how='left',
               on='City Code')
 
-# 2019 data doesn't have the column "MacroRegion", will add below
+# 2019 data doesn't have the column "MacroRegion", will added below
 
 
 def set_macro_region(state):
@@ -162,6 +163,24 @@ def set_macro_region(state):
 
 # assigning each row a MacroRegion
 df['MacroRegion'] = df['State'].apply(set_macro_region)
+
+# assigning a number to each category
+
+
+def category_number(category):
+    if category == 'A':
+        return 4
+    elif category == 'B':
+        return 3
+    elif category == 'C':
+        return 2
+    elif category == 'D':
+        return 1
+    else:
+        return 0
+
+
+df['Category Number'] = df['Category'].apply(category_number)
 
 # ----- filters
 with st.sidebar:
@@ -189,15 +208,15 @@ with st.sidebar:
 
 # ----- metrics/ big numbers
 
-col1, col2, col3, col4 = st.columns([1, 2, 1, 1])
+col = st.columns([1, 2, 1, 1])
 
 # localize number format
 locale.setlocale(locale.LC_NUMERIC, "en_US.UTF-8")
 
-with col1:
+with col[0]:
     st.metric(label='Quantity of cities',
               value=len(df[df['Year'] == 2019]['City'].unique()))
-with col2:
+with col[1]:
     metric_tax_revenue = locale.format_string('%.0f',
                                               val=df[df['Year'] ==
                                                      2019]['Tax Revenue'].sum(),
@@ -207,13 +226,46 @@ with col2:
     st.metric(label='Tax Revenue in 2019',
               value=f'R$ {metric_tax_revenue}')
 
-with col3:
+with col[2]:
     st.metric(label='Establishments',
               value=df[df['Year'] == 2019]['Establishments'].sum().astype(int))
 
-with col4:
+with col[3]:
     st.metric(label='Jobs',
               value=df[df['Year'] == 2019]['Jobs'].sum().astype(int))
+
+# ----- choropleth / brazil map
+
+
+@st.cache_data
+def import_geojson():
+    geojson = json.load(
+        open(r'C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\brasil_estados.json'))
+    return geojson
+
+
+geojson = import_geojson()
+
+df_choropleth = pd.pivot_table(df,
+                               values='Category Number',
+                               index='State',
+                               aggfunc='sum')
+
+fig = px.choropleth(df_choropleth, geojson=geojson,
+                    locations=df_choropleth.index,
+                    color='Category Number',
+                    range_color=(0, max(df_choropleth['Category Number'])),
+                    scope='south america',
+                    color_continuous_scale='Agsunset_r'
+                    )
+
+fig.update_layout(geo=dict(bgcolor='rgba(0,0,0,0)',
+                           projection_scale=1.75,
+                           center=dict(lat=-15, lon=-55)
+                           ))
+
+st.plotly_chart(fig)
+
 
 # ----- top cities in according to tax revenue
 with st.popover("Change ranking column"):
