@@ -200,8 +200,8 @@ else:
     st.title("Tourism Map Dashboard (2019)")
     col = st.columns([1, 2, 1, 1])
 
-    # localize number format
-    locale.setlocale(locale.LC_NUMERIC, "en_CA.UTF-8")
+    # localize number format to en
+    locale.setlocale(locale.LC_ALL, "en_CA.UTF-8")
 
     with col[0]:
         st.metric(label='Quantity of cities',
