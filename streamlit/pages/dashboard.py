@@ -191,7 +191,7 @@ with st.sidebar:
         'Select a MacroRegion:',
         options=df[df['Year'] == 2019]['MacroRegion'].sort_values().unique(),
         default=df[df['Year'] == 2019]['MacroRegion'].sort_values().unique(),
-        placeholder='All MacroRegions selected',
+        placeholder='No options selected',
         help="The Brazilian government has grouped the country's states into five large geographic and statistical units called the Major Regions (Grandes Regiões): North (Norte), Northeast (Nordeste), Central-West (Centro-Oeste), Southeast (Sudeste), and South (Sul)."
     )
 
@@ -201,89 +201,130 @@ with st.sidebar:
         'Select a State:',
         options=df[df['Year'] == 2019]['State'].sort_values().unique(),
         default=df[df['Year'] == 2019]['State'].sort_values().unique(),
-        placeholder='All States selected'
+        placeholder='No options selected'
     )
 
     df = df.query("State == @state")
 
-# ----- metrics/ big numbers
+if len(df) == 0:
+    st.error('Select at least one Macro-Region and State', icon="🚨")
+else:
+    # ----- metrics/ big numbers
+    st.title("Tourism Map Dashboard (2019)")
+    col = st.columns([1, 2, 1, 1])
 
-col = st.columns([1, 2, 1, 1])
+    # localize number format
+    locale.setlocale(locale.LC_NUMERIC, "en_US.UTF-8")
 
-# localize number format
-locale.setlocale(locale.LC_NUMERIC, "en_US.UTF-8")
+    with col[0]:
+        st.metric(label='Quantity of cities',
+                  value=len(df[df['Year'] == 2019]['City'].unique()))
+    with col[1]:
+        metric_tax_revenue = locale.format_string('%.0f',
+                                                  val=df[df['Year'] ==
+                                                         2019]['Tax Revenue'].sum(),
+                                                  grouping=True,
+                                                  monetary=False)
 
-with col[0]:
-    st.metric(label='Quantity of cities',
-              value=len(df[df['Year'] == 2019]['City'].unique()))
-with col[1]:
-    metric_tax_revenue = locale.format_string('%.0f',
-                                              val=df[df['Year'] ==
-                                                     2019]['Tax Revenue'].sum(),
-                                              grouping=True,
-                                              monetary=False)
+        st.metric(label='Tax Revenue in 2019',
+                  value=f'R$ {metric_tax_revenue}')
 
-    st.metric(label='Tax Revenue in 2019',
-              value=f'R$ {metric_tax_revenue}')
+    with col[2]:
+        st.metric(label='Establishments',
+                  value=df[df['Year'] == 2019]['Establishments'].sum().astype(int))
 
-with col[2]:
-    st.metric(label='Establishments',
-              value=df[df['Year'] == 2019]['Establishments'].sum().astype(int))
+    with col[3]:
+        st.metric(label='Jobs',
+                  value=df[df['Year'] == 2019]['Jobs'].sum().astype(int))
 
-with col[3]:
-    st.metric(label='Jobs',
-              value=df[df['Year'] == 2019]['Jobs'].sum().astype(int))
+    # ----- charts
+    col = st.columns([2, 1])
 
-# ----- choropleth / brazil map
+    with col[0]:
+        # ----- choropleth / brazil map
+        @st.cache_data
+        def import_geojson():
+            geojson = json.load(
+                open(r'C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\brasil_estados.json'))
+            return geojson
 
+        geojson = import_geojson()
 
-@st.cache_data
-def import_geojson():
-    geojson = json.load(
-        open(r'C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\brasil_estados.json'))
-    return geojson
+        df_choropleth = pd.pivot_table(df,
+                                       values='Category Number',
+                                       index='State',
+                                       aggfunc='sum')
 
+        fig = px.choropleth(df_choropleth, geojson=geojson,
+                            locations=df_choropleth.index,
+                            color='Category Number',
+                            range_color=(
+                                0, max(df_choropleth['Category Number'])),
+                            scope='south america',
+                            color_continuous_scale='Agsunset_r'
+                            )
 
-geojson = import_geojson()
+        fig.update_layout(geo=dict(bgcolor='rgba(0,0,0,0)',
+                                   projection_scale=1.75,
+                                   center=dict(lat=-15, lon=-55)),
+                          coloraxis_colorbar_x=-0.1,
+                          title={
+            'text': '<b> States with more well categorized cities </b>',
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'},
+            margin=dict(l=0, r=0, t=0, b=0),
+            height=350
+        )
 
-df_choropleth = pd.pivot_table(df,
-                               values='Category Number',
-                               index='State',
-                               aggfunc='sum')
+        st.plotly_chart(fig, use_container_width=True)
 
-fig = px.choropleth(df_choropleth, geojson=geojson,
-                    locations=df_choropleth.index,
-                    color='Category Number',
-                    range_color=(0, max(df_choropleth['Category Number'])),
-                    scope='south america',
-                    color_continuous_scale='Agsunset_r'
-                    )
+    with col[1]:
+        # ----- top cities in according to tax revenue
+        with st.popover("Change ranking column"):
+            variable = st.selectbox("Which variable to rank?",
+                                    options=['Tax Revenue',
+                                             'Domestic Tourists',
+                                             'International Tourists',
+                                             'Jobs',
+                                             'Establishments'])
 
-fig.update_layout(geo=dict(bgcolor='rgba(0,0,0,0)',
-                           projection_scale=1.75,
-                           center=dict(lat=-15, lon=-55)
-                           ))
+        df_cities_tax = df[df['Year'] == 2019][[
+            'City', variable]].sort_values(by=variable, ascending=False)
 
-st.plotly_chart(fig)
+        st.dataframe(df_cities_tax,
+                     column_config={
+                         variable: st.column_config.ProgressColumn(
+                             variable,
+                             format="%f",
+                             min_value=0,
+                             max_value=max(df_cities_tax[variable]))},
+                     hide_index=True,
+                     use_container_width=True)
 
+    # ----- heatmap
+    df_heatmap = pd.pivot_table(data=df,
+                                values='Category Number',
+                                index='Year',
+                                columns=['State'],
+                                fill_value=0,
+                                aggfunc='sum')
 
-# ----- top cities in according to tax revenue
-with st.popover("Change ranking column"):
-    variable = st.selectbox("What's your name?",
-                            options=['Tax Revenue',
-                                     'Domestic Tourists',
-                                     'International Tourists',
-                                     'Jobs',
-                                     'Establishments'])
+    fig = px.imshow(df_heatmap.sort_values(by='State', axis=1),
+                    text_auto=True,
+                    color_continuous_scale='Agsunset_r',
+                    aspect='auto')
 
-df_cities_tax = df[df['Year'] == 2019][[
-    'City', variable]].sort_values(by=variable, ascending=False)
+    fig.update_layout(xaxis=dict(title='Category in 2019',
+                                 side='bottom'),
+                      yaxis=dict(type='category'),
+                      autosize=False,
+                      title={
+        'text': '<b> States with more well categorized cities through the years </b>',
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'}
+    )
 
-st.dataframe(df_cities_tax,
-             column_config={
-                 variable: st.column_config.ProgressColumn(
-                     variable,
-                     format="%f",
-                     min_value=0,
-                     max_value=max(df_cities_tax[variable]))},
-             hide_index=True)
+    st.plotly_chart(fig, use_container_width=True)
