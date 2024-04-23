@@ -135,8 +135,8 @@ with st.expander('Quick explanation about the Tourism Map'):
     st.markdown('''<br> <h5 style> The Categorization of Tourist Municipalities </h5>''',
                 unsafe_allow_html=True)
 
-    col1, col2 = st.columns(2)
-    with col1:
+    col = st.columns(2)
+    with col[0]:
         st.markdown('''
             The [Categorization of Municipalities](http://www.regionalizacao.turismo.gov.br/images/conteudo/Perguntas_espostas_Categorizacao_2019.pdf) is based on a set of indicators that measure the
             economic performance of tourism in the municipalities, such as:
@@ -148,7 +148,7 @@ with st.expander('Quick explanation about the Tourism Map'):
             This Categorization has three historical versions available: 2016, 2017 and 2019.
             ''', unsafe_allow_html=True)
 
-    with col2:
+    with col[1]:
         st.markdown('''
                     | Category | Meaning |
                     |--|--------------------------------|
@@ -165,8 +165,8 @@ with st.expander('Quick explanation about the Tourism Map'):
 st.markdown('''<h5 style> 1. Overall database overview </h5>''',
             unsafe_allow_html=True)
 
-col1, col2 = st.columns([1, 2])
-with col1:
+col = st.columns([1, 2])
+with col[0]:
     with st.container(border=True):
         st.markdown('''<h6 style='text-align: center;'>
                     Total number of cities classified
@@ -194,7 +194,7 @@ with col1:
                     This means some cities have incomplete historical data. The reason for the variation
                     remains unclear and could not be found.''', unsafe_allow_html=True)
 
-with col2:
+with col[1]:
     tab1, tab2 = st.tabs(['Zeros and Nulls', 'Headers'])
 
     with tab1:
@@ -256,8 +256,8 @@ st.markdown('''<h5 style> 2. Category Analysis </h5>''',
             unsafe_allow_html=True)
 
 # Filtered boxplots
-col1, space = st.columns([1, 3])
-with col1:
+col = st.columns([1, 3])
+with col[0]:
     option = st.selectbox(
         'Select the year you would like to filter:',
         (2019, 2017, 2016))
@@ -298,12 +298,12 @@ def boxplot(variable):
     return fig
 
 
-col1, col2 = st.columns(2)
-with col1:
+col = st.columns(2)
+with col[0]:
     st.plotly_chart(boxplot('Jobs'))
     st.plotly_chart(boxplot('Domestic Tourists'))
 
-with col2:
+with col[1]:
     st.plotly_chart(boxplot('Establishments'))
     st.plotly_chart(boxplot('International Tourists'))
 
@@ -335,8 +335,8 @@ with st.expander('Further analysis on categories D & E'):
     st.markdown('''The conclusions written above can be seen on the charts below.
                 ''', unsafe_allow_html=True)
     # Filtered boxplots
-    col1, space = st.columns([1, 3])
-    with col1:
+    col = st.columns([1, 3])
+    with col[0]:
         option = st.selectbox(
             'Select the year to filter:',
             (2019, 2017, 2016))
@@ -375,12 +375,12 @@ with st.expander('Further analysis on categories D & E'):
 
         return fig
 
-    col1, col2 = st.columns(2)
-    with col1:
+    col = st.columns(2)
+    with col[0]:
         st.plotly_chart(histplot('Jobs'))
         st.plotly_chart(histplot('Domestic Tourists'))
 
-    with col2:
+    with col[1]:
         st.plotly_chart(histplot('Establishments'))
         st.plotly_chart(histplot('International Tourists'))
 
@@ -388,8 +388,8 @@ st.markdown('''<h5 style> 2.1. Time analysis </h5>''',
             unsafe_allow_html=True)
 
 # Year comparison
-col1, col2 = st.columns(2)
-with col1:
+col = st.columns(2)
+with col[0]:
     # year categorization percentage
     df_time_pivot_category = pd.pivot_table(data=df,
                                             values='City',
@@ -441,7 +441,7 @@ with col1:
 
     st.plotly_chart(fig)
 
-with col2:
+with col[1]:
     st.markdown('''
                 The total number of destinations in <b>category A</b> remains relatively stable over time.
                 <br>
@@ -458,9 +458,9 @@ with col2:
                 its categorization over time.
                 ''', unsafe_allow_html=True)
 
-col1, col2 = st.columns(2)
+col = st.columns(2)
 
-with col1:
+with col[0]:
     st.markdown('''
                 <b> Categorization stability </b> : This refers to how consistently a city falls within
                 certain categories across the years.
@@ -502,7 +502,7 @@ df['Category Number'] = df['Category'].apply(category_number)
 df['Category Stability'] = df.groupby(
     'City Code')['Category Number'].transform('sum')
 
-with col2:
+with col[1]:
     df_time_pivot_stability = pd.pivot_table(data=df[df['Year'] == 2019],
                                              values='City',
                                              index='Category Stability',
@@ -688,9 +688,9 @@ for ind in df_2019.index:
 df_2019['Airport Nearby'] = airport_nearby
 
 # filters
-col1, col2, col3 = st.columns([1, 3, 2])
+col = st.columns([1, 3, 2])
 
-with col1:
+with col[0]:
     airports = st.toggle('Show only cities with airports near',
                          help='It shows cities with airports within 100 km')
 
@@ -756,7 +756,7 @@ with col1:
                        file_name='cities_to_travel.xlsx')
 
 # dataframe/table
-with col2:
+with col[1]:
     st.dataframe(data=result[['State',
                               'City',
                               'Category',
@@ -768,6 +768,6 @@ with col2:
                  hide_index=True,)
 
 # map
-with col3:
+with col[2]:
     st.map(data=result[['latitude', 'longitude']],
            color='#ef5675')
