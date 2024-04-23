@@ -14,7 +14,6 @@ st.set_page_config(page_title='Dashboard',
 # ----- dataframes and cache
 
 
-@st.cache_data.clear
 @st.cache_data
 def import_category_2019():
     df_2019 = pd.read_excel('data/2019_MTur_Categorization.xlsx', header=3)
