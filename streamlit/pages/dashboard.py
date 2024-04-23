@@ -211,7 +211,7 @@ else:
                                                   val=df[df['Year'] ==
                                                          2019]['Tax Revenue'].sum(),
                                                   grouping=True,
-                                                  monetary=False)
+                                                  monetary=True)
 
         st.metric(label='Tax Revenue in 2019',
                   value=f'R$ {metric_tax_revenue}')
@@ -232,7 +232,7 @@ else:
         @st.cache_data
         def import_geojson():
             geojson = json.load(
-                open('data\brasil_estados.json'))
+                open('data/brasil_estados.json'))
             return geojson
 
         geojson = import_geojson()
