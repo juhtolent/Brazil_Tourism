@@ -5,7 +5,6 @@ import plotly.express as px
 import json
 import locale
 
-
 st.set_page_config(page_title='Dashboard',
                    layout='wide',
                    page_icon='📊',
@@ -14,13 +13,10 @@ st.set_page_config(page_title='Dashboard',
 
 # ----- dataframes and cache
 
-# filepath = 'data/2019_MTur_Categorization.xlsx'
-filepath = r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\2019_MTur_Categorization.xlsx"
-
 
 @st.cache_data
 def import_category_2019():
-    df_2019 = pd.read_excel(filepath, header=3)
+    df_2019 = pd.read_excel('data/2019_MTur_Categorization.xlsx', header=3)
 
     # renaming to english and to standardize
     df_2019.rename({
@@ -40,14 +36,11 @@ def import_category_2019():
 
 df_2019 = import_category_2019()
 
-# filepath = 'data/2016_MTur_Categorization.csv'
-filepath = r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\2016_MTur_Categorization.csv"
-
 
 @st.cache_data
 def import_category_2016():
     df_2016 = pd.read_csv(
-        filepath, delimiter=';')
+        'data/2016_MTur_Categorization.csv', delimiter=';')
 
     # renaming to english and to standardize
     df_2016.rename({
@@ -67,14 +60,11 @@ def import_category_2016():
 
 df_2016 = import_category_2016()
 
-# filepath = 'data/2017_MTur_Categorization.csv'
-filepath = r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\2017_MTur_Categorization.csv"
-
 
 @st.cache_data
 def import_category_2017():
     df_2017 = pd.read_csv(
-        filepath, delimiter=';')
+        'data/2017_MTur_Categorization.csv', delimiter=';')
 
     # renaming to english and to standardize
     df_2017.rename({
@@ -110,15 +100,12 @@ df_2017['Year'] = 2017
 
 df = pd.concat([df_2019, df_2016, df_2017])
 
-# filepath = 'data/BR_cities_latlong.csv'
-filepath = r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\BR_cities_latlong.csv"
-
 
 @st.cache_data
 def import_latlong():
     # adding lat/long to the dataframe
     df_latlong = pd.read_csv(
-        filepath, delimiter=',')
+        'data/BR_cities_latlong.csv', delimiter=',')
 
     # renaming to english and to standardize
     # renaming to english and to standardize
