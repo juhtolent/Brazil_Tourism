@@ -232,7 +232,7 @@ else:
         @st.cache_data
         def import_geojson():
             geojson = json.load(
-                open(r'C:\Users\julia\Documents\GitHub\Brazil_Tourism\data\brasil_estados.json'))
+                open('data\brasil_estados.json'))
             return geojson
 
         geojson = import_geojson()
