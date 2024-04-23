@@ -5,22 +5,17 @@ from st_pages import Page, Section, add_page_title, show_pages
 
 st.set_page_config(page_title='Portfolio',
                    layout='wide',
-                   page_icon='📊',
+                   page_icon='👋',
                    initial_sidebar_state='expanded',
                    menu_items={
                        'About': info['About']
                    })
 
 # ----- setting pages
-# show_pages(
-#    [
-# Page(r"C:\Users\julia\Documents\GitHub\Brazil_Tourism\streamlit\homepage_dashboard.py", "Homepage", ":books:")
-# Page("C:\Users\julia\Documents\GitHub\Brazil_Tourism\streamlit\pages\analysis_dash.py", "Dash Macro", ":bar_chart:")
-# Page("pages/dash_micro.py", "Dash Micro", ":female-student:"),
-# Page("pages/filtro_base.py", "Filtro e Download Base", ":pushpin:"),
-# Page("pages/one_page.py", "Informações Gerais e Históricas", ":1234:"),
-#    ]
-# )
+show_pages([Page("streamlit/homepage.py", "Homepage", "👋"),
+            Page("streamlit/pages/analysis.py", "Analysis", "🛫"),
+            Page("streamlit/pages/dashboard.py", "Dashboard", "📊")
+            ])
 
 # ----- introduction
 col1, col2 = st.columns([2, 6])
