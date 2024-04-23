@@ -201,7 +201,7 @@ else:
     col = st.columns([1, 2, 1, 1])
 
     # localize number format
-    locale.setlocale(locale.LC_NUMERIC, "en_US.UTF-8")
+    locale.setlocale(locale.LC_NUMERIC, "en_CA.UTF-8")
 
     with col[0]:
         st.metric(label='Quantity of cities',
