@@ -763,10 +763,10 @@ with col[1]:
                               'Category',
                               'Category Stability',
                               'Tourist Region',
-                              'Airport Nearby']].background_gradient(axis=None, vmin=0, vmax=12, cmap="YlGnBu"),
+                              'Airport Nearby']],
                  column_config={'Category': 'Category 2019'},
                  height=500,
-                 hide_index=True,)
+                 hide_index=True)
 
 # map
 with col[2]:
