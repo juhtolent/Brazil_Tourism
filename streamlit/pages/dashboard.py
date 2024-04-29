@@ -278,7 +278,7 @@ else:
 
         df_cities_tax = df[df['Year'] == 2019][[
             'City', variable]].sort_values(by=variable, ascending=False)
-
+        
         st.dataframe(df_cities_tax,
                      column_config={
                          variable: st.column_config.ProgressColumn(

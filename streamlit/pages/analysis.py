@@ -757,12 +757,13 @@ with col[0]:
 
 # dataframe/table
 with col[1]:
+    # dataframe viz
     st.dataframe(data=result[['State',
                               'City',
                               'Category',
                               'Category Stability',
                               'Tourist Region',
-                              'Airport Nearby']],
+                              'Airport Nearby']].background_gradient(axis=None, vmin=0, vmax=12, cmap="YlGnBu"),
                  column_config={'Category': 'Category 2019'},
                  height=500,
                  hide_index=True,)
